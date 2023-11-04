@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Nova Scotia Written Driving Test"
 include(":app")
+ 
