@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Nova Scotia Written Driving Test</string>
+    <string name="enter_your_email">Enter your Email</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="login">Login</string>
+    <string name="not_registered_yet_sign_up">Not Registered Yet ? Sign Up!</string>
 </resources>
