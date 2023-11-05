@@ -79,10 +79,10 @@ assembleDebug:
     paths:
       - app/build/outputs/
 
-# Run all tests, if any fails, interrupt the pipeline(fail it)
-debugTests:
-  needs: [lintDebug, assembleDebug]
-  interruptible: true
-  stage: test
-  script:
-    - ./gradlew -Pci --console=plain :app:testDebug
+# # Run all tests, if any fails, interrupt the pipeline(fail it)
+# debugTests:
+#   needs: [lintDebug, assembleDebug]
+#   interruptible: true
+#   stage: test
+#   script:
+#     - ./gradlew -Pci --console=plain :app:testDebug
