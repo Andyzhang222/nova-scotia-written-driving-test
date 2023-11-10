@@ -1,8 +1,12 @@
 package com.example.novascotiawrittendrivingtest
 
-data class Question(
-    val questionText: String,
-    val options: List<String>,
-    val imageResId: Int,
-    val correctAnswer: String
+data class Question (
+    val id: Int,
+    val question: String,
+    val image: Int,
+    val optionOne: String,
+    val optionTwo: String,
+    val optionThree: String,
+    val optionFour: String,
+    val correctAnswer: Int
 )
