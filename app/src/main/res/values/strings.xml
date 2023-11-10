@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Nova Scotia Written Driving Test</string>
+
+
+        <!-- Question 1 -->
+        <string name="question_1_text">What does this sign mean?</string>
+        <string name="question_1_option_a">There is a sharp right turn ahead</string>
+        <string name="question_1_option_b">There is a sharp left turn ahead</string>
+        <string name="question_1_option_c">There is a slight right curve ahead</string>
+        <string name="question_1_option_d">There is a slight left curve ahead</string>
+        <string name="question_1_correct">C</string>
+
+        <!-- Question 2 -->
+        <string name="question_2_text">What does this sign mean?</string>
+        <string name="question_2_option_a">Drivers must keep left of the traffic island</string>
+        <string name="question_2_option_b">Drivers must take the left turn</string>
+        <string name="question_2_option_c">Drivers must take the right turn</string>
+        <string name="question_2_option_d">Drivers must keep right of the traffic island</string>
+        <string name="question_2_correct">D</string>
+
+        <!-- ... Continue for all questions ... -->
+
+
 </resources>
