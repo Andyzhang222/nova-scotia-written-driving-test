@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Nova Scotia Written Driving Test</string>
+    <string name="back" />
+    <string name="restart" />
 </resources>
