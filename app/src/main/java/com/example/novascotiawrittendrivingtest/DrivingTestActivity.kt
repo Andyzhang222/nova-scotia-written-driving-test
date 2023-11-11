@@ -80,7 +80,7 @@ class DrivingTestActivity : AppCompatActivity() {
     }
 
     private fun setDefault(v: TextView) {
-        v.setTextColor(Color.parseColor("#7A8089"))
+        v.setTextColor(Color.parseColor("#000000"))
         v.typeface = Typeface.DEFAULT
         v.background = ContextCompat.getDrawable(this, R.drawable.default_option_border_bg)
     }
