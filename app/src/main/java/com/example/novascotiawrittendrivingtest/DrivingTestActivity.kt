@@ -22,6 +22,8 @@ class DrivingTestActivity : AppCompatActivity() {
     private lateinit var btnSubmit: Button
     private lateinit var pbProgress: ProgressBar
     private lateinit var tvProgress: TextView
+    private lateinit var backButton: ImageView
+    private lateinit var restartButton: ImageView
 
     private lateinit var questionsList: ArrayList<Question>
 
@@ -44,6 +46,12 @@ class DrivingTestActivity : AppCompatActivity() {
         tvOptionFour.setOnClickListener { setOptionClick(it) }
 
         btnSubmit.setOnClickListener { setOptionClick(it) }
+        backButton.setOnClickListener { navigateToMain() }
+        restartButton.setOnClickListener {
+            currentPosition = 1
+            correctAnswer = 0
+            initializeQuestion()
+        }
     }
 
     private fun initializeViews() {
@@ -56,6 +64,8 @@ class DrivingTestActivity : AppCompatActivity() {
         btnSubmit = findViewById(R.id.btnSubmit)
         pbProgress = findViewById(R.id.pb)
         tvProgress = findViewById(R.id.tv_progress)
+        restartButton = findViewById(R.id.restartButton)
+        backButton = findViewById(R.id.backButton)
     }
 
     private fun initializeQuestion() {
@@ -111,7 +121,7 @@ class DrivingTestActivity : AppCompatActivity() {
         if (currentPosition <= questionsList.size) {
             initializeQuestion()
         } else {
-            //TODO: navigateToScore() // Uncomment or implement this when needed
+            navigateToMain()
         }
     }
 
@@ -154,12 +164,12 @@ class DrivingTestActivity : AppCompatActivity() {
     }
 
 //To do: Uncomment or implement this when needed
-//    private fun navigateToScore() {
+    private fun navigateToMain() {
 //        val intent = Intent(this, ScoreActivity::class.java)
 //        intent.putExtra("score", mCorrectAnswer)
 //        // Add other extras as needed
 //        startActivity(intent)
-//    }
+    }
 }
 
 

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/backButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -31,7 +31,7 @@
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/re_btn" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/restartButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -154,11 +154,11 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:id="@+id/btnSubmit"
-            android:text="SUBMIT"/>
+            android:text="SUBMIT" />
 
     </LinearLayout>
 </ScrollView>
