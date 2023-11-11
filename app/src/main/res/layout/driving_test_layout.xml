@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            />
 
         <LinearLayout
             android:id="@+id/ll_progressbar"
@@ -79,7 +80,7 @@
             android:textSize="17sp"
             android:textColor="#7A8089"
             android:textStyle="bold"
-            android:gravity="center"/>
+            />
 
 
         <TextView
@@ -95,7 +96,7 @@
             android:textSize="17sp"
             android:textColor="#7A8089"
             android:textStyle="bold"
-            android:gravity="center"/>
+           />
 
 
 
@@ -111,7 +112,7 @@
             android:background="@drawable/default_option_border_bg"
             android:textColor="#7A8089"
             android:textStyle="bold"
-            android:gravity="center"/>
+            />
 
 
         <TextView
@@ -127,11 +128,7 @@
             android:background="@drawable/default_option_border_bg"
 
             android:textStyle="bold"
-            android:gravity="center"/>
-
-
-
-
+           />
 
         <Button
             android:layout_width="match_parent"
@@ -139,7 +136,6 @@
             android:layout_margin="10dp"
             android:id="@+id/btnSubmit"
             android:text="SUBMIT"/>
-
 
 
     </LinearLayout>
