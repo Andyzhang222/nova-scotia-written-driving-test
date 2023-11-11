@@ -59,6 +59,8 @@ class DrivingTestActivity : AppCompatActivity() {
     }
 
     private fun initializeQuestion() {
+        btnSubmit.isEnabled = false
+
         val question: Question = questionsList[currentPosition - 1]
 
         tvQuestion.text = question.question
@@ -86,6 +88,7 @@ class DrivingTestActivity : AppCompatActivity() {
     }
 
     private fun setOptionClick(v: View?) {
+        btnSubmit.isEnabled = true
         when (v?.id) {
             R.id.tv_optionOne -> selectedOptionView(tvOptionOne, 1)
             R.id.tv_optionTwo -> selectedOptionView(tvOptionTwo, 2)
@@ -108,7 +111,7 @@ class DrivingTestActivity : AppCompatActivity() {
         if (currentPosition <= questionsList.size) {
             initializeQuestion()
         } else {
-            // navigateToScore() // Uncomment or implement this when needed
+            //TODO: navigateToScore() // Uncomment or implement this when needed
         }
     }
 
@@ -150,6 +153,7 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
+//To do: Uncomment or implement this when needed
 //    private fun navigateToScore() {
 //        val intent = Intent(this, ScoreActivity::class.java)
 //        intent.putExtra("score", mCorrectAnswer)
