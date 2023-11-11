@@ -29,7 +29,7 @@ class DrivingTestActivity : AppCompatActivity() {
 
     private var selectedPosition: Int = 0
     private var correctAnswer: Int = 0
-    private var currentPosition: Int = 1
+    private var currentPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class DrivingTestActivity : AppCompatActivity() {
         btnSubmit.setOnClickListener { setOptionClick(it) }
         backButton.setOnClickListener { navigateToMain() }
         restartButton.setOnClickListener {
-            currentPosition = 1
+            currentPosition = 0
             correctAnswer = 0
             initializeQuestion()
         }
@@ -71,7 +71,7 @@ class DrivingTestActivity : AppCompatActivity() {
     private fun initializeQuestion() {
         btnSubmit.isEnabled = false
 
-        val question: Question = questionsList[currentPosition - 1]
+        val question: Question = questionsList[currentPosition]
 
         tvQuestion.text = question.question
         imageView.setImageResource(question.image)
@@ -88,7 +88,7 @@ class DrivingTestActivity : AppCompatActivity() {
         setDefault(tvOptionThree)
         setDefault(tvOptionFour)
 
-        btnSubmit.text = if (currentPosition == questionsList.size) "Finish Quiz" else "Answer"
+        btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Answer"
     }
 
     private fun setDefault(v: TextView) {
@@ -118,7 +118,7 @@ class DrivingTestActivity : AppCompatActivity() {
 
     private fun handleNoOptionSelected() {
         currentPosition++
-        if (currentPosition <= questionsList.size) {
+        if (currentPosition < questionsList.size) {
             initializeQuestion()
         } else {
             navigateToMain()
@@ -126,7 +126,7 @@ class DrivingTestActivity : AppCompatActivity() {
     }
 
     private fun evaluateSelectedOption() {
-        val question = questionsList[currentPosition - 1]
+        val question = questionsList[currentPosition]
         if (question.correctAnswer != selectedPosition) {
             answerUpdate(selectedPosition, R.drawable.wrong_option_border_bg)
         } else {
@@ -135,7 +135,7 @@ class DrivingTestActivity : AppCompatActivity() {
 
         answerUpdate(question.correctAnswer, R.drawable.correct_option_border_bg)
 
-        btnSubmit.text = if (currentPosition == questionsList.size) "Finish Quiz" else "Next Question"
+        btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Next Question"
 
         selectedPosition = 0
     }
