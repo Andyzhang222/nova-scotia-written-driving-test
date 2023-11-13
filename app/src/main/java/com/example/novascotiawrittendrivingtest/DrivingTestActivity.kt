@@ -1,8 +1,10 @@
 package com.example.novascotiawrittendrivingtest
 
+import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -10,8 +12,19 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 
 class DrivingTestActivity : AppCompatActivity() {
+
+    // create two users used for testing
+//    val user1 = User(userId = "1", currentQuestionPosition = 0)
+//    val user2 = User(userId = "2", currentQuestionPosition = 0)
 
     private lateinit var tvQuestion: TextView
     private lateinit var imageView: ImageView
@@ -31,6 +44,8 @@ class DrivingTestActivity : AppCompatActivity() {
     private var correctAnswer: Int = 0
     private var currentPosition: Int = 0
 
+    private lateinit var database: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.driving_test_layout)
@@ -38,7 +53,23 @@ class DrivingTestActivity : AppCompatActivity() {
         initializeViews()
 
         questionsList = Constants.getQuestion()
-        initializeQuestion()
+
+        // initialize question based on last time question position
+        database = Firebase.database.reference
+        database.child("users").child("1").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue<User>()
+                // Do something with the user data
+                if (user != null) {
+                    currentPosition = user.currentQuestionPosition
+                    initializeQuestion()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle possible errors
+            }
+        })
 
         tvOptionOne.setOnClickListener { setOptionClick(it) }
         tvOptionTwo.setOnClickListener { setOptionClick(it) }
@@ -118,6 +149,7 @@ class DrivingTestActivity : AppCompatActivity() {
 
     private fun handleNoOptionSelected() {
         currentPosition++
+        updateUserInFirebase("1", currentPosition)
         if (currentPosition < questionsList.size) {
             initializeQuestion()
         } else {
@@ -163,7 +195,18 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
-//To do: Uncomment or implement this when needed
+    private fun updateUserInFirebase(userId: String, currentPosition: Int) {
+        val userUpdate = mapOf("currentQuestionPosition" to currentPosition)
+        database.child("users").child(userId).updateChildren(userUpdate)
+            .addOnSuccessListener {
+                Log.d(TAG, "User data updated successfully.")
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "Failed to update user data.", it)
+            }
+    }
+
+    //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
 //        val intent = Intent(this, ScoreActivity::class.java)
 //        intent.putExtra("score", mCorrectAnswer)
