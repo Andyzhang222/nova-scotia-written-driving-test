@@ -26,15 +26,15 @@ class DrivingTestActivity : AppCompatActivity() {
 //    val user1 = User(userId = "1", currentQuestionPosition = 0)
 //    val user2 = User(userId = "2", currentQuestionPosition = 0)
 
-    private lateinit var tvQuestion: TextView
-    private lateinit var imageView: ImageView
-    private lateinit var tvOptionOne: TextView
-    private lateinit var tvOptionTwo: TextView
-    private lateinit var tvOptionThree: TextView
-    private lateinit var tvOptionFour: TextView
+    private lateinit var questionTextView: TextView
+    private lateinit var questionImage: ImageView
+    private lateinit var optionOne: TextView
+    private lateinit var optionTwo: TextView
+    private lateinit var optionThree: TextView
+    private lateinit var optionFour: TextView
     private lateinit var btnSubmit: Button
-    private lateinit var pbProgress: ProgressBar
-    private lateinit var tvProgress: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressText: TextView
     private lateinit var backButton: ImageView
     private lateinit var restartButton: ImageView
 
@@ -52,7 +52,7 @@ class DrivingTestActivity : AppCompatActivity() {
 
         initializeViews()
 
-        questionsList = Constants.getQuestion()
+        questionsList = QuestionBank.getQuestion()
 
         // initialize question based on last time question position
         database = Firebase.database.reference
@@ -71,10 +71,10 @@ class DrivingTestActivity : AppCompatActivity() {
             }
         })
 
-        tvOptionOne.setOnClickListener { setOptionClick(it) }
-        tvOptionTwo.setOnClickListener { setOptionClick(it) }
-        tvOptionThree.setOnClickListener { setOptionClick(it) }
-        tvOptionFour.setOnClickListener { setOptionClick(it) }
+        optionOne.setOnClickListener { setOptionClick(it) }
+        optionTwo.setOnClickListener { setOptionClick(it) }
+        optionThree.setOnClickListener { setOptionClick(it) }
+        optionFour.setOnClickListener { setOptionClick(it) }
 
         btnSubmit.setOnClickListener { setOptionClick(it) }
         backButton.setOnClickListener { navigateToMain() }
@@ -86,15 +86,15 @@ class DrivingTestActivity : AppCompatActivity() {
     }
 
     private fun initializeViews() {
-        tvQuestion = findViewById(R.id.tv_question)
-        imageView = findViewById(R.id.imageView)
-        tvOptionOne = findViewById(R.id.tv_optionOne)
-        tvOptionTwo = findViewById(R.id.tv_optionTwo)
-        tvOptionThree = findViewById(R.id.tv_optionThree)
-        tvOptionFour = findViewById(R.id.tv_optionFour)
+        questionTextView = findViewById(R.id.questionText)
+        questionImage = findViewById(R.id.imageView)
+        optionOne = findViewById(R.id.optionOne)
+        optionTwo = findViewById(R.id.optionTwo)
+        optionThree = findViewById(R.id.optionThree)
+        optionFour = findViewById(R.id.optionFour)
         btnSubmit = findViewById(R.id.btnSubmit)
-        pbProgress = findViewById(R.id.pb)
-        tvProgress = findViewById(R.id.tv_progress)
+        progressBar = findViewById(R.id.progressText)
+        progressText = findViewById(R.id.tv_progress)
         restartButton = findViewById(R.id.restartButton)
         backButton = findViewById(R.id.backButton)
     }
@@ -104,20 +104,20 @@ class DrivingTestActivity : AppCompatActivity() {
 
         val question: Question = questionsList[currentPosition]
 
-        tvQuestion.text = question.question
-        imageView.setImageResource(question.image)
-        tvOptionOne.text = question.optionOne
-        tvOptionTwo.text = question.optionTwo
-        tvOptionThree.text = question.optionThree
-        tvOptionFour.text = question.optionFour
+        questionTextView.text = question.question
+        questionImage.setImageResource(question.image)
+        optionOne.text = question.optionOne
+        optionTwo.text = question.optionTwo
+        optionThree.text = question.optionThree
+        optionFour.text = question.optionFour
 
-        pbProgress.progress = currentPosition
-        tvProgress.text = "$currentPosition / ${pbProgress.max}"
+        progressBar.progress = currentPosition
+        progressText.text = "$currentPosition / ${progressBar.max}"
 
-        setDefault(tvOptionOne)
-        setDefault(tvOptionTwo)
-        setDefault(tvOptionThree)
-        setDefault(tvOptionFour)
+        setDefault(optionOne)
+        setDefault(optionTwo)
+        setDefault(optionThree)
+        setDefault(optionFour)
 
         btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Answer"
     }
@@ -131,10 +131,10 @@ class DrivingTestActivity : AppCompatActivity() {
     private fun setOptionClick(v: View?) {
         btnSubmit.isEnabled = true
         when (v?.id) {
-            R.id.tv_optionOne -> selectedOptionView(tvOptionOne, 1)
-            R.id.tv_optionTwo -> selectedOptionView(tvOptionTwo, 2)
-            R.id.tv_optionThree -> selectedOptionView(tvOptionThree, 3)
-            R.id.tv_optionFour -> selectedOptionView(tvOptionFour, 4)
+            R.id.optionOne -> selectedOptionView(optionOne, 1)
+            R.id.optionTwo -> selectedOptionView(optionTwo, 2)
+            R.id.optionThree -> selectedOptionView(optionThree, 3)
+            R.id.optionFour -> selectedOptionView(optionFour, 4)
             R.id.btnSubmit -> handleSubmitButtonClicked()
         }
     }
@@ -174,10 +174,10 @@ class DrivingTestActivity : AppCompatActivity() {
 
 
     private fun selectedOptionView(tv: TextView, selectedPosition: Int) {
-        setDefault(tvOptionOne)
-        setDefault(tvOptionTwo)
-        setDefault(tvOptionThree)
-        setDefault(tvOptionFour)
+        setDefault(optionOne)
+        setDefault(optionTwo)
+        setDefault(optionThree)
+        setDefault(optionFour)
 
         this.selectedPosition = selectedPosition
 
@@ -188,10 +188,10 @@ class DrivingTestActivity : AppCompatActivity() {
 
     private fun answerUpdate(selectedOption: Int, drawableView: Int) {
         when (selectedOption) {
-            1 -> tvOptionOne.background = ContextCompat.getDrawable(this, drawableView)
-            2 -> tvOptionTwo.background = ContextCompat.getDrawable(this, drawableView)
-            3 -> tvOptionThree.background = ContextCompat.getDrawable(this, drawableView)
-            4 -> tvOptionFour.background = ContextCompat.getDrawable(this, drawableView)
+            1 -> optionOne.background = ContextCompat.getDrawable(this, drawableView)
+            2 -> optionTwo.background = ContextCompat.getDrawable(this, drawableView)
+            3 -> optionThree.background = ContextCompat.getDrawable(this, drawableView)
+            4 -> optionFour.background = ContextCompat.getDrawable(this, drawableView)
         }
     }
 

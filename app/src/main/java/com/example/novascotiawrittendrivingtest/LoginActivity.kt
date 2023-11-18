@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -54,19 +55,19 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            //TODO: Go to main activity
-            Toast.makeText(
-                baseContext,
-                "Already logged in.",
-                Toast.LENGTH_SHORT,
-            ).show()
-        }
-    }
+//    public override fun onStart() {
+//        super.onStart()
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        val currentUser = auth.currentUser
+//        if (currentUser != null) {
+//            //TODO: Go to main activity
+//            Toast.makeText(
+//                baseContext,
+//                "Already logged in.",
+//                Toast.LENGTH_SHORT,
+//            ).show()
+//        }
+//    }
 
     private fun signIn(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
@@ -75,23 +76,25 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     val user = auth.currentUser
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication success.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    // TODO: Go to main activity
+                    showAlert("Login successfully.")
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    // TODO: Change it to a dialog
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showAlert("Login failed.")
                 }
             }
     }
 
+    private fun showAlert(message: String) {
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton("Ok") { dialog, _ ->
+                dialog.dismiss()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .create()
+            .show()
+    }
 }

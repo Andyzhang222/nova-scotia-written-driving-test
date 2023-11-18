@@ -54,7 +54,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_question"
+                android:id="@+id/questionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
@@ -72,13 +72,13 @@
                 android:contentDescription="Question Image" />
 
             <RelativeLayout
-                android:id="@+id/ll_progressbar"
+                android:id="@+id/progressBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
 
                 <ProgressBar
-                    android:id="@+id/pb"
+                    android:id="@+id/progressText"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="25sp"
@@ -102,7 +102,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/tv_optionOne"
+                android:id="@+id/optionOne"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -115,7 +115,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_optionTwo"
+                android:id="@+id/optionTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -127,7 +127,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_optionThree"
+                android:id="@+id/optionThree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -139,7 +139,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_optionFour"
+                android:id="@+id/optionFour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

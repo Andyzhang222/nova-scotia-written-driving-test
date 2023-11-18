@@ -1,6 +1,6 @@
 package com.example.novascotiawrittendrivingtest
 
-object Constants {
+object QuestionBank {
 
     fun getQuestion() : ArrayList<Question>{
 

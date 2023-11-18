@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -14,8 +17,11 @@ import com.google.firebase.ktx.Firebase
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var emailEditText: EditText
+    private lateinit var emailLayout: TextInputLayout
     private lateinit var passwordEditText: EditText
-    private lateinit var creditCardEditText: EditText
+    private lateinit var passwordLayout: TextInputLayout
+    private lateinit var confirmPasswordEditText: EditText
+    private lateinit var confirmPasswordLayout: TextInputLayout
     private lateinit var registerButton: Button
 
     private lateinit var auth: FirebaseAuth
@@ -23,46 +29,42 @@ class RegisterActivity : AppCompatActivity() {
 
 //    public override fun onStart() {
 //        super.onStart()
-//        // 检查用户是否已登录（非空），并相应更新用户界面
+//        // Check if the user is already logged in (not null) and update the UI accordingly
 //        val currentUser = auth.currentUser
 //        if (currentUser != null) {
 //            reload()
 //        }
 //    }
 
-    private fun reload() {
-        val user = FirebaseAuth.getInstance().currentUser
-        user?.reload()?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // 跳转到login
-                updateUI(user)
-            } else {
-                // 重新加载没有达到预期效果
-                val error = task.exception?.message
-                Toast.makeText(this, "Failed to reload user data: $error", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
+//    private fun reload() {
+//        val user = FirebaseAuth.getInstance().currentUser
+//        user?.reload()?.addOnCompleteListener { task ->
+//            if (task.isSuccessful) {
+//                // Navigate to login activity
+//                updateUI(user)
+//            } else {
+//                val error = task.exception?.message
+//                Toast.makeText(this, "Failed to reload user data: $error", Toast.LENGTH_LONG).show()
+//            }
+//        }
+//    }
 
 
-    // 更新界面的方法，参数是 FirebaseUser 类型的 currentUser (跳转到login)
-    private fun updateUI(currentUser: FirebaseUser?) {
-        // 检查当前用户是否为非空
-        if (currentUser != null) {
-            // 用户已登陆的话跳转到homePage
-            // 跳转到homePageActivity (暂时写的是MainActivity)
-            val homeIntent = Intent(this, MainActivity::class.java).apply {
-                // 传递User到loginActivity(传递变量名：USER)
-                putExtra("USER", currentUser)
-            }
-
-            startActivity(homeIntent)
-            finish()
-        } else {
-            // 用户为 null，注册失败或者未注册
-            Toast.makeText(this, "Registration failed, please try again", Toast.LENGTH_SHORT).show()
-        }
-    }
+    // Update UI based on the current user
+//    private fun updateUI(currentUser: FirebaseUser?) {
+//        if (currentUser != null) {
+//            // Navigate to home activity
+//            val homeIntent = Intent(this, MainActivity::class.java).apply {
+//                // Pass the user to home activity (pass variable name: USER)
+//                putExtra("USER", currentUser)
+//            }
+//
+//            startActivity(homeIntent)
+//            finish()
+//        } else {
+//            Toast.makeText(this, "Registration failed, please try again", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,73 +73,163 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = Firebase.auth;
 
+        val toLoginTextView : TextView = findViewById(R.id.toLoginTextView)
+
+        toLoginTextView.setOnClickListener {
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            startActivity(loginIntent)
+            finish()
+        }
 
         // Initialize your EditTexts and Button
         emailEditText = findViewById(R.id.emailEditText)
+        emailLayout = findViewById(R.id.emailLayout)
         passwordEditText = findViewById(R.id.passwordEditText)
-        creditCardEditText = findViewById(R.id.rePasswordEditText)
+        passwordLayout = findViewById(R.id.passwordLayout)
+        confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText)
+        confirmPasswordLayout = findViewById(R.id.confirmPasswordLayout)
         registerButton = findViewById(R.id.registerButton)
+
+        emailFocusListener()
+        passwordFocusListener()
+        confirmPasswordFocusListener()
 
         // Register the button listener
         registerButton.setOnClickListener {
             performRegistration()
         }
-
-
     }
 
+    private fun emailFocusListener() {
+        emailEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val email = emailEditText.text.toString()
+                if (!validateEmailNullEmpty(email)) {
+                    emailLayout.helperText = "Please enter your email"
+                } else if (!validateEmail(email)) {
+                    emailLayout.helperText = "Invalid Email"
+                } else {
+                    emailLayout.helperText = null
+                }
+            }
+        }
+    }
+
+    private fun passwordFocusListener() {
+        passwordEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val password = passwordEditText.text.toString()
+                if (!validatePwdNullEmpty(password)) {
+                    passwordLayout.helperText = "Please enter your password"
+                } else if (!validatePwdLength(password)) {
+                    passwordLayout.helperText = "Password length should be between 8 and 20"
+                } else if (!validatePwdFormat(password)) {
+                    passwordLayout.helperText = "Password should contain at least one capital letter, lower case and number"
+                } else {
+                    passwordLayout.helperText = null
+                }
+            }
+        }
+    }
+
+    private fun confirmPasswordFocusListener() {
+        confirmPasswordEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val password = passwordEditText.text.toString()
+                val rePassword = confirmPasswordEditText.text.toString()
+                if (!validatePwdNullEmpty(rePassword)) {
+                    confirmPasswordLayout.helperText = "Please enter your password"
+                } else if (password != rePassword) {
+                    confirmPasswordLayout.helperText = "Passwords do not match for the previous one"
+                } else {
+                    confirmPasswordLayout.helperText = null
+                }
+            }
+        }
+    }
 
     private fun performRegistration() {
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
-        val rePassword = creditCardEditText.text.toString()
+        val emailHelperText = emailLayout.helperText.toString()
+        val passwordHelperText = passwordLayout.helperText.toString()
+        val confirmPasswordHelperText = confirmPasswordLayout.helperText.toString()
+
+        if (email == "" || password == "" || confirmPasswordEditText.text.toString() == "") {
+            showAlert("Please fill in all the fields")
+            if (email == "") {
+                emailLayout.helperText = "Please enter your email"
+            }
+
+            if (password == "") {
+                passwordLayout.helperText = "Please enter your password"
+            }
+
+            if (confirmPasswordEditText.text.toString() == "") {
+                confirmPasswordLayout.helperText = "Please enter your password"
+            }
+
+            return
+        }
 
         // Perform validation checks
-        if (!validateEmailNullEmpty(email) || !validateEmail(email)) {
-            showToast("Invalid Email")
+        if (emailHelperText != "null") {
+            showAlert(emailHelperText)
             return
         }
 
-        if (!validatePwdNullEmpty(password) || !validatePwdLength(password) || !validatePwdFormat(password)) {
-            showToast("Invalid Password")
+        if (passwordHelperText != "null") {
+            showAlert(passwordHelperText)
             return
         }
 
-        if (password != rePassword) {
-            showToast("Passwords do not match for the previous one")
+        if (confirmPasswordHelperText != "null") {
+            showAlert(confirmPasswordHelperText)
             return
         }
 
 
-        //如果验证全部通过，执行注册流程
+        // Register the user with email and password
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    showToast("Registration Successful")
+                    showAlert("Registration Successful")
                     val user = auth.currentUser
 
-                    /*
-                    //注册跳转到login
-                    val LoginIntent = Intent(this, LoginActivity::class.java).apply {
-                        // 传递USER到LoginActivity(传递变量名：USER)
-                        putExtra("USER", user)
-                    }
-                    startActivity(LoginIntent)
-                    finish()
-                    */
+                    showAlert("Registration Successful")
+
                 } else {
                     // If sign in fails, display a message to the user.
-                    showToast("Authentication failed: ${task.exception?.message}")
-                    updateUI(null)
+                    showAlert("Authentication failed: ${task.exception?.message}")
+//                    updateUI(null)
                 }
             }
 
 
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun showAlert(message: String) {
+        if (message == "Registration Successful") {
+            AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("Go to Login") { dialog, _ ->
+                    dialog.dismiss()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .create()
+                .show()
+        } else {
+            AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
     }
 
 
@@ -155,10 +247,10 @@ class RegisterActivity : AppCompatActivity() {
     /**
      * This method checks if the register password has the right length
      * @param pwd the password that read from register format
-     * @return true if the password is between 8 -13, false if less than 8 or more than 13
+     * @return true if the password is between 8 -20, false if less than 8 or more than 20
      */
     fun validatePwdLength(pwd: String): Boolean {
-        return pwd.length in 8..13
+        return pwd.length in 8..20
     }
 
     /**
@@ -170,8 +262,7 @@ class RegisterActivity : AppCompatActivity() {
     fun validatePwdFormat(pwd: String): Boolean {
         return pwd.matches(".*[A-Z].*".toRegex()) &&
                 pwd.matches(".*[a-z].*".toRegex()) &&
-                pwd.matches(".*[0-9].*".toRegex()) &&
-                pwd.matches(".*[-+_!@#$%^&*.,?].*".toRegex())
+                pwd.matches(".*[0-9].*".toRegex())
     }
 
     /**
