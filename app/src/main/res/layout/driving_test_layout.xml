@@ -72,13 +72,13 @@
                 android:contentDescription="Question Image" />
 
             <RelativeLayout
-                android:id="@+id/progressBar"
+                android:id="@+id/progressBarContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
 
                 <ProgressBar
-                    android:id="@+id/progressText"
+                    android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="25sp"
@@ -90,7 +90,7 @@
                     android:progressDrawable="@drawable/custom_progress_bg" />
 
                 <TextView
-                    android:id="@+id/tv_progress"
+                    android:id="@+id/progressText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"

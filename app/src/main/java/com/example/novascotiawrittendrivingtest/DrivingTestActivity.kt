@@ -43,9 +43,10 @@ class DrivingTestActivity : AppCompatActivity() {
     private var selectedPosition: Int = 0
     private var correctAnswer: Int = 0
     private var currentPosition: Int = 0
+    private var correctness: Boolean = false
 
     private lateinit var database: DatabaseReference
-    private lateinit var userId: String
+//    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +77,7 @@ class DrivingTestActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle possible errors
+                Log.e(TAG, "Failed to read user data.", error.toException())
             }
         })
 
@@ -111,8 +112,8 @@ class DrivingTestActivity : AppCompatActivity() {
         optionThree = findViewById(R.id.optionThree)
         optionFour = findViewById(R.id.optionFour)
         btnSubmit = findViewById(R.id.btnSubmit)
-        progressBar = findViewById(R.id.progressText)
-        progressText = findViewById(R.id.tv_progress)
+        progressBar = findViewById(R.id.progressBar)
+        progressText = findViewById(R.id.progressText)
         restartButton = findViewById(R.id.restartButton)
         backButton = findViewById(R.id.backButton)
     }
@@ -190,6 +191,12 @@ class DrivingTestActivity : AppCompatActivity() {
      * Handle go to next question
      */
     private fun handleNextQuestion() {
+        if (!correctness) {
+            // Save incorrect question to firebase
+            val question = questionsList[currentPosition]
+            saveIncorrectQuestion("1", question)
+        }
+
         currentPosition++
         updateUserInFirebase("1", currentPosition)
         if (currentPosition < questionsList.size) {
@@ -208,8 +215,10 @@ class DrivingTestActivity : AppCompatActivity() {
         // If selected option is correct, increment correct answer count, else update the layout of wrong answer
         if (question.correctAnswer != selectedPosition) {
             answerUpdate(selectedPosition, R.drawable.wrong_option_border_bg)
+            correctness = false
         } else {
             correctAnswer++
+            correctness = true
         }
 
         // Show correct answer
@@ -221,7 +230,7 @@ class DrivingTestActivity : AppCompatActivity() {
         // Reset selected position
         selectedPosition = 0
     }
-    
+
     /**
      * Set selected option view
      */
@@ -265,6 +274,53 @@ class DrivingTestActivity : AppCompatActivity() {
                 Log.e(TAG, "Failed to update user data.", it)
             }
     }
+
+    /**
+     * Save incorrect question to firebase
+     */
+    private fun saveIncorrectQuestion(userId: String, question: Question) {
+        val questionIdAsString = question.id.toString()
+        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
+
+        incorrectQuestionsRef.child(questionIdAsString).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (!snapshot.exists()) {
+                    // Question has not been saved before, save it now
+                    incorrectQuestionsRef.child(questionIdAsString).setValue(true) // Just marking it as true for existence
+                        .addOnSuccessListener {
+                            Log.d(TAG, "Incorrect question saved successfully.")
+                        }
+                        .addOnFailureListener {
+                            Log.e(TAG, "Failed to save incorrect question.", it)
+                        }
+                } else {
+                    Log.d(TAG, "Incorrect question already saved, not saving duplicate.")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(TAG, "Database error: $databaseError")
+            }
+        })
+    }
+
+    // To get the wrong question list, please use:
+//    private fun fetchIncorrectQuestionIds(userId: String) {
+//        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
+//
+//        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if (snapshot.exists()) {
+                      // incorrectQuestionIds is the string list with wrong question ids
+//                    val incorrectQuestionIds = snapshot.children.mapNotNull { it.key }
+//                }
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                Log.e(TAG, "Database error: $databaseError")
+//            }
+//        })
+//    }
 
     //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
