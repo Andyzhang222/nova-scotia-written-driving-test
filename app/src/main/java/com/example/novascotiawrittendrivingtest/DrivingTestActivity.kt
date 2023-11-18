@@ -45,13 +45,22 @@ class DrivingTestActivity : AppCompatActivity() {
     private var currentPosition: Int = 0
 
     private lateinit var database: DatabaseReference
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.driving_test_layout)
 
+        //TODO: Use current user ID
+//        val user = Firebase.auth.currentUser
+//        user?.let {
+//            userId = it.uid
+//        }
+
+        // initialize views
         initializeViews()
 
+        // initialize questions
         questionsList = QuestionBank.getQuestion()
 
         // initialize question based on last time question position
@@ -71,13 +80,19 @@ class DrivingTestActivity : AppCompatActivity() {
             }
         })
 
-        optionOne.setOnClickListener { setOptionClick(it) }
-        optionTwo.setOnClickListener { setOptionClick(it) }
-        optionThree.setOnClickListener { setOptionClick(it) }
-        optionFour.setOnClickListener { setOptionClick(it) }
+        // set click listeners for question options
+        optionOne.setOnClickListener { setClick(it) }
+        optionTwo.setOnClickListener { setClick(it) }
+        optionThree.setOnClickListener { setClick(it) }
+        optionFour.setOnClickListener { setClick(it) }
 
-        btnSubmit.setOnClickListener { setOptionClick(it) }
+        // set click listener for submit button
+        btnSubmit.setOnClickListener { setClick(it) }
+
+        // set click listener for back button
         backButton.setOnClickListener { navigateToMain() }
+
+        // set click listener for restart button
         restartButton.setOnClickListener {
             currentPosition = 0
             correctAnswer = 0
@@ -85,6 +100,9 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initialize views
+     */
     private fun initializeViews() {
         questionTextView = findViewById(R.id.questionText)
         questionImage = findViewById(R.id.imageView)
@@ -99,11 +117,17 @@ class DrivingTestActivity : AppCompatActivity() {
         backButton = findViewById(R.id.backButton)
     }
 
+    /**
+     * Initialize question
+     */
     private fun initializeQuestion() {
+        // Submit button is disabled when no answer is selected
         btnSubmit.isEnabled = false
 
+        // Get current question
         val question: Question = questionsList[currentPosition]
 
+        // Set question and options
         questionTextView.text = question.question
         questionImage.setImageResource(question.image)
         optionOne.text = question.optionOne
@@ -111,25 +135,36 @@ class DrivingTestActivity : AppCompatActivity() {
         optionThree.text = question.optionThree
         optionFour.text = question.optionFour
 
+        // Update progress bar and text
         progressBar.progress = currentPosition
         progressText.text = "$currentPosition / ${progressBar.max}"
 
+        // Set default option view layout
         setDefault(optionOne)
         setDefault(optionTwo)
         setDefault(optionThree)
         setDefault(optionFour)
 
+        // Set submit button text
         btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Answer"
     }
 
+    /**
+     * Set default option view layout
+     */
     private fun setDefault(v: TextView) {
         v.setTextColor(Color.parseColor("#000000"))
         v.typeface = Typeface.DEFAULT
         v.background = ContextCompat.getDrawable(this, R.drawable.default_option_border_bg)
     }
 
-    private fun setOptionClick(v: View?) {
+    /**
+     * Set option click handler
+     */
+    private fun setClick(v: View?) {
+        // Enable submit button
         btnSubmit.isEnabled = true
+        // Set selected option view
         when (v?.id) {
             R.id.optionOne -> selectedOptionView(optionOne, 1)
             R.id.optionTwo -> selectedOptionView(optionTwo, 2)
@@ -139,15 +174,22 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Handle submit button click
+     */
     private fun handleSubmitButtonClicked() {
+        // If there is no selected option, question is being answered, go next question, else evaluate selected option
         if (selectedPosition == 0) {
-            handleNoOptionSelected()
+            handleNextQuestion()
         } else {
             evaluateSelectedOption()
         }
     }
 
-    private fun handleNoOptionSelected() {
+    /**
+     * Handle go to next question
+     */
+    private fun handleNextQuestion() {
         currentPosition++
         updateUserInFirebase("1", currentPosition)
         if (currentPosition < questionsList.size) {
@@ -157,35 +199,50 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Evaluate selected option
+     */
     private fun evaluateSelectedOption() {
+        // Get current question
         val question = questionsList[currentPosition]
+        // If selected option is correct, increment correct answer count, else update the layout of wrong answer
         if (question.correctAnswer != selectedPosition) {
             answerUpdate(selectedPosition, R.drawable.wrong_option_border_bg)
         } else {
             correctAnswer++
         }
 
+        // Show correct answer
         answerUpdate(question.correctAnswer, R.drawable.correct_option_border_bg)
 
+        // Set submit button text
         btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Next Question"
 
+        // Reset selected position
         selectedPosition = 0
     }
-
-
+    
+    /**
+     * Set selected option view
+     */
     private fun selectedOptionView(tv: TextView, selectedPosition: Int) {
         setDefault(optionOne)
         setDefault(optionTwo)
         setDefault(optionThree)
         setDefault(optionFour)
 
+        // Set selected position
         this.selectedPosition = selectedPosition
 
+        // Set selected option view layout
         tv.setTextColor(Color.parseColor("#363A43"))
         tv.setTypeface(tv.typeface, Typeface.BOLD)
         tv.background = ContextCompat.getDrawable(this, R.drawable.selected_option_border_bg)
     }
 
+    /**
+     * Used for updating correct answer and wrong answer drawables
+     */
     private fun answerUpdate(selectedOption: Int, drawableView: Int) {
         when (selectedOption) {
             1 -> optionOne.background = ContextCompat.getDrawable(this, drawableView)
@@ -195,6 +252,9 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Update user test state in firebase
+     */
     private fun updateUserInFirebase(userId: String, currentPosition: Int) {
         val userUpdate = mapOf("currentQuestionPosition" to currentPosition)
         database.child("users").child(userId).updateChildren(userUpdate)
