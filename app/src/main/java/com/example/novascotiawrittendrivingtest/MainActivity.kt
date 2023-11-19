@@ -4,13 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 
 class MainActivity : AppCompatActivity() {
 
     private  lateinit var practiceTestContainer : CardView
     private lateinit var progressBar: ProgressBar
-    private var questionCount = 0
+    private lateinit var progressText: TextView
+    private var questionCount = 10
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
+        progressText = findViewById(R.id.progressText)
 
         practiceTestContainer.setOnClickListener(){
             // Navigate to practice test activity
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         // logic to set progress bar based on question count
         fun run() {
             progressBar.progress = questionCount
+            progressText.text = "$questionCount / ${progressBar.max}"
         }
     }
 }

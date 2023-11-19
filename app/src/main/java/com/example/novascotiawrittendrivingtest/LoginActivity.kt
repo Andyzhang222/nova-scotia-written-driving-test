@@ -57,15 +57,18 @@ class LoginActivity : AppCompatActivity() {
 
 //    public override fun onStart() {
 //        super.onStart()
-//        // Check if user is signed in (non-null) and update UI accordingly.
+//        // Check if user is signed in (non-null)
 //        val currentUser = auth.currentUser
 //        if (currentUser != null) {
-//            //TODO: Go to main activity
 //            Toast.makeText(
 //                baseContext,
 //                "Already logged in.",
 //                Toast.LENGTH_SHORT,
 //            ).show()
+//
+//            // Navigate to main activity if user is already logged in
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
 //        }
 //    }
 
