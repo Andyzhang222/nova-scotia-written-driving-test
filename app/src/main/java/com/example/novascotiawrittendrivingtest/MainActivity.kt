@@ -1,7 +1,7 @@
 package com.example.novascotiawrittendrivingtest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.ProgressBar
 
 class MainActivity : AppCompatActivity() {
