@@ -70,8 +70,9 @@ class DrivingTestActivity : AppCompatActivity() {
                 // Do something with the user data
                 if (user != null) {
                     currentPosition = user.currentQuestionPosition
-                    initializeQuestion()
                 }
+
+                initializeQuestion()
             }
 
             override fun onCancelled(error: DatabaseError) {
