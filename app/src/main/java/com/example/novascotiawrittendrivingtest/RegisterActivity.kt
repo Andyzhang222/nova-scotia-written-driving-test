@@ -58,22 +58,22 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null)
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            Toast.makeText(
-                baseContext,
-                "Already logged in.",
-                Toast.LENGTH_SHORT,
-            ).show()
-
-            // Navigate to main activity if user is already logged in
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-    }
+//    public override fun onStart() {
+//        super.onStart()
+//        // Check if user is signed in (non-null)
+//        val currentUser = auth.currentUser
+//        if (currentUser != null) {
+//            Toast.makeText(
+//                baseContext,
+//                "Already logged in.",
+//                Toast.LENGTH_SHORT,
+//            ).show()
+//
+//            // Navigate to main activity if user is already logged in
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//        }
+//    }
 
     private fun emailFocusListener() {
         emailEditText.setOnFocusChangeListener { _, hasFocus ->
