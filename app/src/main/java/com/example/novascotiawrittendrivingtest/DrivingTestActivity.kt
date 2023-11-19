@@ -1,6 +1,7 @@
 package com.example.novascotiawrittendrivingtest
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -21,10 +23,6 @@ import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 
 class DrivingTestActivity : AppCompatActivity() {
-
-    // create two users used for testing
-//    val user1 = User(userId = "1", currentQuestionPosition = 0)
-//    val user2 = User(userId = "2", currentQuestionPosition = 0)
 
     private lateinit var questionTextView: TextView
     private lateinit var questionImage: ImageView
@@ -46,17 +44,17 @@ class DrivingTestActivity : AppCompatActivity() {
     private var correctness: Boolean = false
 
     private lateinit var database: DatabaseReference
-//    private lateinit var userId: String
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.driving_test_layout)
 
-        //TODO: Use current user ID
-//        val user = Firebase.auth.currentUser
-//        user?.let {
-//            userId = it.uid
-//        }
+
+        val user = Firebase.auth.currentUser
+        user?.let {
+            userId = it.uid
+        }
 
         // initialize views
         initializeViews()
@@ -66,7 +64,7 @@ class DrivingTestActivity : AppCompatActivity() {
 
         // initialize question based on last time question position
         database = Firebase.database.reference
-        database.child("users").child("1").addValueEventListener(object : ValueEventListener {
+        database.child("users").child(userId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue<User>()
                 // Do something with the user data
@@ -194,11 +192,11 @@ class DrivingTestActivity : AppCompatActivity() {
         if (!correctness) {
             // Save incorrect question to firebase
             val question = questionsList[currentPosition]
-            saveIncorrectQuestion("1", question)
+            saveIncorrectQuestion(userId, question)
         }
 
         currentPosition++
-        updateUserInFirebase("1", currentPosition)
+        updateUserInFirebase(userId, currentPosition)
         if (currentPosition < questionsList.size) {
             initializeQuestion()
         } else {
@@ -324,10 +322,9 @@ class DrivingTestActivity : AppCompatActivity() {
 
     //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
-//        val intent = Intent(this, ScoreActivity::class.java)
-//        intent.putExtra("score", mCorrectAnswer)
-//        // Add other extras as needed
-//        startActivity(intent)
+        val intent = Intent(this, MainActivity::class.java)
+        // Add other extras as needed
+        startActivity(intent)
     }
 }
 

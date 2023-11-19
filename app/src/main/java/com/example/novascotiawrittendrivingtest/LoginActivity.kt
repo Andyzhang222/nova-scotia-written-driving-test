@@ -76,25 +76,35 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     val user = auth.currentUser
-                    showAlert("Login successfully.")
+                    showAlert("Login successfully")
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    showAlert("Login failed.")
+                    showAlert("Login failed")
                 }
             }
     }
 
     private fun showAlert(message: String) {
-        AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton("Ok") { dialog, _ ->
-                dialog.dismiss()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .create()
-            .show()
+        if (message == "Login successfully") {
+            AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .create()
+                .show()
+        } else {
+            AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
     }
 }
