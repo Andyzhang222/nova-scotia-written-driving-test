@@ -2,10 +2,9 @@ package com.example.novascotiawrittendrivingtest
 
 object QuestionBank {
 
-    fun getQuestion() : ArrayList<Question>{
+    val questionsList = ArrayList<Question>()
 
-        val questionsList = ArrayList<Question>()
-
+    init {
         questionsList.add(Question(
             1,
             "What does this sign mean?",
@@ -449,7 +448,17 @@ object QuestionBank {
             "There is a slight left curve ahead",
             3
         ))
+    }
 
+    fun getAllQuestions(): ArrayList<Question> {
         return questionsList
+    }
+
+    fun getQuestionsByIds(questionIds: List<String>): ArrayList<Question> {
+        // Convert String IDs to Int
+        val intIds = questionIds.mapNotNull { it.toIntOrNull() }
+
+        // Filter questions based on converted IDs
+        return ArrayList(questionsList.filter { it.id in intIds })
     }
 }

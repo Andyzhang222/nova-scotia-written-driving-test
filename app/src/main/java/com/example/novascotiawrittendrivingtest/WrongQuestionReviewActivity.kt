@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 
-class DrivingTestActivity : AppCompatActivity() {
+class WrongQuestionReviewActivity : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
     private lateinit var questionImage: ImageView
@@ -37,6 +37,7 @@ class DrivingTestActivity : AppCompatActivity() {
     private lateinit var restartButton: ImageView
 
     private lateinit var questionsList: ArrayList<Question>
+    private lateinit var incorrectQuestionsList: List<String>
 
     private var selectedPosition: Int = 0
     private var correctAnswer: Int = 0
@@ -50,25 +51,28 @@ class DrivingTestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.driving_test_layout)
 
+        database = Firebase.database.reference
         val user = Firebase.auth.currentUser
         user?.let {
             userId = it.uid
+            fetchIncorrectQuestionIds(userId) { incorrectIds ->
+                incorrectQuestionsList = incorrectIds
+            }
         }
 
         // initialize views
         initializeViews()
 
         // initialize questions
-        questionsList = QuestionBank.getAllQuestions()
+        questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
 
         // initialize question based on last time question position
-        database = Firebase.database.reference
         database.child("users").child(userId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue<User>()
                 // Do something with the user data
                 if (user != null) {
-                    currentPosition = user.currentQuestionPosition
+                    currentPosition = user.currentQuestionId
                 }
 
                 initializeQuestion()
@@ -263,7 +267,7 @@ class DrivingTestActivity : AppCompatActivity() {
      * Update user test state in firebase
      */
     private fun updateUserInFirebase(userId: String, currentPosition: Int) {
-        val userUpdate = mapOf("currentQuestionPosition" to currentPosition)
+        val userUpdate = mapOf("currentPositionInWrongQuestion" to currentPosition)
         database.child("users").child(userId).updateChildren(userUpdate)
             .addOnSuccessListener {
                 Log.d(TAG, "User data updated successfully.")
@@ -302,23 +306,21 @@ class DrivingTestActivity : AppCompatActivity() {
         })
     }
 
-    // To get the wrong question list, please use:
-//    private fun fetchIncorrectQuestionIds(userId: String) {
-//        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
-//
-//        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                if (snapshot.exists()) {
-                      // incorrectQuestionIds is the string list with wrong question ids
-//                    val incorrectQuestionIds = snapshot.children.mapNotNull { it.key }
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e(TAG, "Database error: $databaseError")
-//            }
-//        })
-//    }
+    private fun fetchIncorrectQuestionIds(userId: String, callback: (List<String>) -> Unit) {
+        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
+        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val incorrectQuestionIds = snapshot.children.mapNotNull { it.key }
+                    callback(incorrectQuestionIds)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(TAG, "Database error: $databaseError")
+            }
+        })
+    }
 
     //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
@@ -327,6 +329,3 @@ class DrivingTestActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
-
-
