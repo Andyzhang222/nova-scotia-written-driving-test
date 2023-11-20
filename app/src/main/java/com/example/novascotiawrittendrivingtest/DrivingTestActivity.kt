@@ -145,7 +145,7 @@ class DrivingTestActivity : AppCompatActivity() {
         setDefault(optionFour)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Answer"
+        btnSubmit.text = if (currentPosition == questionsList.size) "Finish Quiz" else "Answer"
     }
 
     /**
@@ -195,9 +195,9 @@ class DrivingTestActivity : AppCompatActivity() {
             saveIncorrectQuestion(userId, question)
         }
 
-        currentPosition++
-        updateUserInFirebase(userId, currentPosition)
-        if (currentPosition < questionsList.size) {
+        if (currentPosition + 1 < questionsList.size) {
+            currentPosition++
+            updateUserInFirebase(userId, currentPosition)
             initializeQuestion()
         } else {
             navigateToMain()

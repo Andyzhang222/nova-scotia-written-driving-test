@@ -37,7 +37,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
     private lateinit var restartButton: ImageView
 
     private lateinit var questionsList: ArrayList<Question>
-    private lateinit var incorrectQuestionsList: List<String>
+    private var incorrectQuestionsList: List<String> = listOf()
 
     private var selectedPosition: Int = 0
     private var correctAnswer: Int = 0
@@ -55,16 +55,14 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         val user = Firebase.auth.currentUser
         user?.let {
             userId = it.uid
-            fetchIncorrectQuestionIds(userId) { incorrectIds ->
-                incorrectQuestionsList = incorrectIds
-            }
+            fetchIncorrectQuestionIds(userId)
         }
 
         // initialize views
         initializeViews()
 
         // initialize questions
-        questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
+//        questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
 
         // initialize question based on last time question position
         database.child("users").child(userId).addValueEventListener(object : ValueEventListener {
@@ -72,7 +70,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
                 val user = snapshot.getValue<User>()
                 // Do something with the user data
                 if (user != null) {
-                    currentPosition = user.currentQuestionId
+                    currentPosition = user.currentPositionInWrongQuestion
                 }
 
                 initializeQuestion()
@@ -139,8 +137,9 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         optionFour.text = question.optionFour
 
         // Update progress bar and text
+        progressBar.max = questionsList.size
         progressBar.progress = currentPosition
-        progressText.text = "$currentPosition / ${progressBar.max}"
+        progressText.text = "$currentPosition / ${incorrectQuestionsList.size}"
 
         // Set default option view layout
         setDefault(optionOne)
@@ -149,7 +148,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         setDefault(optionFour)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Answer"
+        btnSubmit.text = if (currentPosition == questionsList.size) "Finish Quiz" else "Answer"
     }
 
     /**
@@ -193,15 +192,9 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
      * Handle go to next question
      */
     private fun handleNextQuestion() {
-        if (!correctness) {
-            // Save incorrect question to firebase
-            val question = questionsList[currentPosition]
-            saveIncorrectQuestion(userId, question)
-        }
-
-        currentPosition++
-        updateUserInFirebase(userId, currentPosition)
-        if (currentPosition < questionsList.size) {
+        if (currentPosition + 1 < questionsList.size) {
+            currentPosition++
+            updateUserInFirebase(userId, currentPosition)
             initializeQuestion()
         } else {
             navigateToMain()
@@ -277,42 +270,13 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
             }
     }
 
-    /**
-     * Save incorrect question to firebase
-     */
-    private fun saveIncorrectQuestion(userId: String, question: Question) {
-        val questionIdAsString = question.id.toString()
-        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
-
-        incorrectQuestionsRef.child(questionIdAsString).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (!snapshot.exists()) {
-                    // Question has not been saved before, save it now
-                    incorrectQuestionsRef.child(questionIdAsString).setValue(true) // Just marking it as true for existence
-                        .addOnSuccessListener {
-                            Log.d(TAG, "Incorrect question saved successfully.")
-                        }
-                        .addOnFailureListener {
-                            Log.e(TAG, "Failed to save incorrect question.", it)
-                        }
-                } else {
-                    Log.d(TAG, "Incorrect question already saved, not saving duplicate.")
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(TAG, "Database error: $databaseError")
-            }
-        })
-    }
-
-    private fun fetchIncorrectQuestionIds(userId: String, callback: (List<String>) -> Unit) {
+    private fun fetchIncorrectQuestionIds(userId: String) {
         val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
         incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val incorrectQuestionIds = snapshot.children.mapNotNull { it.key }
-                    callback(incorrectQuestionIds)
+                    incorrectQuestionsList = snapshot.children.mapNotNull { it.key }
+                    questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
                 }
             }
 
