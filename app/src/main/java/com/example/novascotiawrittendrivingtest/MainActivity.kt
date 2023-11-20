@@ -2,8 +2,11 @@ package com.example.novascotiawrittendrivingtest
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ProgressBar
+import androidx.appcompat.widget.Toolbar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 
@@ -14,10 +17,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var progressText: TextView
     private var questionCount = 0
+    private lateinit var navToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initialToolBar()
 
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
@@ -50,5 +55,29 @@ class MainActivity : AppCompatActivity() {
             progressBar.progress = questionCount
             progressText.text = "$questionCount / ${progressBar.max}"
         }
+    }
+
+    private fun initialToolBar()
+    {
+        navToolbar = findViewById(R.id.main_toolbar)
+        setSupportActionBar(navToolbar)
+        supportActionBar?.setTitle("")
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        when (item.itemId) {
+            R.id.action_log_out -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
     }
 }
