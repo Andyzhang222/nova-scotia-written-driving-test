@@ -23,49 +23,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var confirmPasswordEditText: EditText
     private lateinit var confirmPasswordLayout: TextInputLayout
     private lateinit var registerButton: Button
-
     private lateinit var auth: FirebaseAuth
-
-
-//    public override fun onStart() {
-//        super.onStart()
-//        // Check if the user is already logged in (not null) and update the UI accordingly
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//            reload()
-//        }
-//    }
-
-//    private fun reload() {
-//        val user = FirebaseAuth.getInstance().currentUser
-//        user?.reload()?.addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                // Navigate to login activity
-//                updateUI(user)
-//            } else {
-//                val error = task.exception?.message
-//                Toast.makeText(this, "Failed to reload user data: $error", Toast.LENGTH_LONG).show()
-//            }
-//        }
-//    }
-
-
-    // Update UI based on the current user
-//    private fun updateUI(currentUser: FirebaseUser?) {
-//        if (currentUser != null) {
-//            // Navigate to home activity
-//            val homeIntent = Intent(this, MainActivity::class.java).apply {
-//                // Pass the user to home activity (pass variable name: USER)
-//                putExtra("USER", currentUser)
-//            }
-//
-//            startActivity(homeIntent)
-//            finish()
-//        } else {
-//            Toast.makeText(this, "Registration failed, please try again", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +57,23 @@ class RegisterActivity : AppCompatActivity() {
             performRegistration()
         }
     }
+
+//    public override fun onStart() {
+//        super.onStart()
+//        // Check if user is signed in (non-null)
+//        val currentUser = auth.currentUser
+//        if (currentUser != null) {
+//            Toast.makeText(
+//                baseContext,
+//                "Already logged in.",
+//                Toast.LENGTH_SHORT,
+//            ).show()
+//
+//            // Navigate to main activity if user is already logged in
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//        }
+//    }
 
     private fun emailFocusListener() {
         emailEditText.setOnFocusChangeListener { _, hasFocus ->
@@ -202,7 +177,6 @@ class RegisterActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     showAlert("Authentication failed: ${task.exception?.message}")
-//                    updateUI(null)
                 }
             }
 

@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 
-class DrivingTestActivity : AppCompatActivity() {
+class WrongQuestionReviewActivity : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
     private lateinit var questionImage: ImageView
@@ -37,6 +37,7 @@ class DrivingTestActivity : AppCompatActivity() {
     private lateinit var restartButton: ImageView
 
     private lateinit var questionsList: ArrayList<Question>
+    private var incorrectQuestionsList: List<String> = listOf()
 
     private var selectedPosition: Int = 0
     private var correctAnswer: Int = 0
@@ -50,25 +51,26 @@ class DrivingTestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.driving_test_layout)
 
+        database = Firebase.database.reference
         val user = Firebase.auth.currentUser
         user?.let {
             userId = it.uid
+            fetchIncorrectQuestionIds(userId)
         }
 
         // initialize views
         initializeViews()
 
         // initialize questions
-        questionsList = QuestionBank.getAllQuestions()
+//        questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
 
         // initialize question based on last time question position
-        database = Firebase.database.reference
         database.child("users").child(userId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue<User>()
                 // Do something with the user data
                 if (user != null) {
-                    currentPosition = user.currentQuestionPosition
+                    currentPosition = user.currentPositionInWrongQuestion
                 }
 
                 initializeQuestion()
@@ -135,8 +137,9 @@ class DrivingTestActivity : AppCompatActivity() {
         optionFour.text = question.optionFour
 
         // Update progress bar and text
+        progressBar.max = questionsList.size
         progressBar.progress = currentPosition
-        progressText.text = "$currentPosition / ${progressBar.max}"
+        progressText.text = "$currentPosition / ${incorrectQuestionsList.size}"
 
         // Set default option view layout
         setDefault(optionOne)
@@ -189,12 +192,6 @@ class DrivingTestActivity : AppCompatActivity() {
      * Handle go to next question
      */
     private fun handleNextQuestion() {
-        if (!correctness) {
-            // Save incorrect question to firebase
-            val question = questionsList[currentPosition]
-            saveIncorrectQuestion(userId, question)
-        }
-
         if (currentPosition + 1 < questionsList.size) {
             currentPosition++
             updateUserInFirebase(userId, currentPosition)
@@ -263,7 +260,7 @@ class DrivingTestActivity : AppCompatActivity() {
      * Update user test state in firebase
      */
     private fun updateUserInFirebase(userId: String, currentPosition: Int) {
-        val userUpdate = mapOf("currentQuestionPosition" to currentPosition)
+        val userUpdate = mapOf("currentPositionInWrongQuestion" to currentPosition)
         database.child("users").child(userId).updateChildren(userUpdate)
             .addOnSuccessListener {
                 Log.d(TAG, "User data updated successfully.")
@@ -273,26 +270,13 @@ class DrivingTestActivity : AppCompatActivity() {
             }
     }
 
-    /**
-     * Save incorrect question to firebase
-     */
-    private fun saveIncorrectQuestion(userId: String, question: Question) {
-        val questionIdAsString = question.id.toString()
+    private fun fetchIncorrectQuestionIds(userId: String) {
         val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
-
-        incorrectQuestionsRef.child(questionIdAsString).addListenerForSingleValueEvent(object : ValueEventListener {
+        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (!snapshot.exists()) {
-                    // Question has not been saved before, save it now
-                    incorrectQuestionsRef.child(questionIdAsString).setValue(true) // Just marking it as true for existence
-                        .addOnSuccessListener {
-                            Log.d(TAG, "Incorrect question saved successfully.")
-                        }
-                        .addOnFailureListener {
-                            Log.e(TAG, "Failed to save incorrect question.", it)
-                        }
-                } else {
-                    Log.d(TAG, "Incorrect question already saved, not saving duplicate.")
+                if (snapshot.exists()) {
+                    incorrectQuestionsList = snapshot.children.mapNotNull { it.key }
+                    questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
                 }
             }
 
@@ -302,24 +286,6 @@ class DrivingTestActivity : AppCompatActivity() {
         })
     }
 
-    // To get the wrong question list, please use:
-//    private fun fetchIncorrectQuestionIds(userId: String) {
-//        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
-//
-//        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                if (snapshot.exists()) {
-                      // incorrectQuestionIds is the string list with wrong question ids
-//                    val incorrectQuestionIds = snapshot.children.mapNotNull { it.key }
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e(TAG, "Database error: $databaseError")
-//            }
-//        })
-//    }
-
     //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
@@ -327,6 +293,3 @@ class DrivingTestActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
-
-

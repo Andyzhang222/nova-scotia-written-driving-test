@@ -19,6 +19,12 @@
             android:name=".LoginActivity"
             android:exported="true" />
         <activity
+            android:name=".DrivingTestActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WrongQuestionReviewActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -27,9 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".DrivingTestActivity"
-            android:exported="true" />
     </application>
 
 </manifest>
