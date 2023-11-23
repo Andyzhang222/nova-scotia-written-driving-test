@@ -1,11 +1,14 @@
 package com.example.novascotiawrittendrivingtest
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -39,6 +42,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         createLocationRequest()
         setupLocationCallback()
+        val returnButton = findViewById<Button>(R.id.returnButton)
+        returnButton.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                // Handle the button click to return to MainActivity
+                val intent = Intent(this@MapsActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish() // Close the MapsActivity
+            }
+        })
+
 
     }
 
@@ -71,12 +84,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         val drivingSchools = listOf(
             // Replace this with actual driving school data
-            LatLng(44.6465, -63.5926), // Example location in Nova Scotia
-            LatLng(44.6407, -63.5696),
-            LatLng(44.6675, -63.5630),
-            LatLng(44.6499, -63.6099),
-            LatLng(44.6521, -63.6502),
-            LatLng(44.6652, -63.6425)
+            LatLng(44.3484, -78.7605), // Example location in Nova Scotia
+            LatLng(44.6921, -63.5307)
         )
 
         val nearestSchool = drivingSchools.minByOrNull { schoolLatLng ->

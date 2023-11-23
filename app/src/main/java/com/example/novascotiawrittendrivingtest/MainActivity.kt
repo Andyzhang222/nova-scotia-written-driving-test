@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     private  lateinit var practiceTestContainer : CardView
     private lateinit var questionReviewContainer: CardView
+    private lateinit var testLocation: CardView
     private lateinit var progressBar: ProgressBar
     private lateinit var progressText: TextView
     private var questionCount = 0
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
+        testLocation=findViewById(R.id.testLocation)
 
         progressText = findViewById(R.id.progressText)
 
@@ -40,6 +42,13 @@ class MainActivity : AppCompatActivity() {
             // Navigate to question review activity
             val questionReviewIntent = Intent(this, WrongQuestionReviewActivity::class.java)
             startActivity(questionReviewIntent)
+            finish()
+        }
+
+       testLocation.setOnClickListener(){
+            // Navigate to question review activity
+            val testLocation= Intent(this, MapsActivity::class.java)
+            startActivity(testLocation)
             finish()
         }
 
