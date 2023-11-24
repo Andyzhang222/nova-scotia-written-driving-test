@@ -1,10 +1,35 @@
 <resources>
     <string name="app_name">Nova Scotia Written Driving Test</string>
+    <string name="language_button">Chinese</string>
+
+    // Registry page
     <string name="enter_your_email">Enter your Email</string>
     <string name="enter_your_password">Enter Your Password</string>
     <string name="login">Login</string>
     <string name="not_registered_yet_sign_up">Not Registered Yet ? Sign Up!</string>
+
+    <string name="email_hint">Enter your Email</string>
+    <string name="password_hint">Type Your Password</string>
+    <string name="confirm_password_hint">Retype Your Password</string>
+    <string name="register_button">Register Now!</string>
+    <string name="to_login_text">Already Registered, Sign In!</string>
+
+    <string name="registration_successful">Registration Successful</string>
+    <string name="go_to_login">Go to Login</string>
+    <string name="ok">OK</string>
+
+    <string name="fill_all_fields">Please fill in all the fields</string>
+    <string name="enter_email">Please enter your email</string>
+    <string name="enter_password">Please enter your password</string>
+    <string name="authentication_failed">Authentication failed: %1$s</string>
+
+
     <string name="back" />
     <string name="restart" />
     <string name="log_out">Log Out</string>
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Chinese</item>
+    </string-array>
 </resources>
+

@@ -6,13 +6,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.util.Locale
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -24,6 +23,9 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var confirmPasswordLayout: TextInputLayout
     private lateinit var registerButton: Button
     private lateinit var auth: FirebaseAuth
+
+    private var currentLanguage = "en"
+    private lateinit var languageButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,17 @@ class RegisterActivity : AppCompatActivity() {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
             finish()
+        }
+
+        languageButton = findViewById(R.id.languageButton)
+        languageButton.setOnClickListener {
+            if (Locale.getDefault().language == "en") {
+                switchLanguage("zh")
+                languageButton.text = getString(R.string.language_button) // Will be '英文' after the locale change
+            } else {
+                switchLanguage("en")
+                languageButton.text = getString(R.string.language_button) // Will be 'Chinese' after the locale change
+            }
         }
 
         // Initialize your EditTexts and Button
@@ -57,6 +70,17 @@ class RegisterActivity : AppCompatActivity() {
             performRegistration()
         }
     }
+
+    private fun switchLanguage(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val resources = resources
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        recreate() // Recreate the activity to reflect the change
+    }
+
 
 //    public override fun onStart() {
 //        super.onStart()
@@ -126,68 +150,54 @@ class RegisterActivity : AppCompatActivity() {
     private fun performRegistration() {
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
-        val emailHelperText = emailLayout.helperText.toString()
-        val passwordHelperText = passwordLayout.helperText.toString()
-        val confirmPasswordHelperText = confirmPasswordLayout.helperText.toString()
+        val confirmPassword = confirmPasswordEditText.text.toString()
 
-        if (email == "" || password == "" || confirmPasswordEditText.text.toString() == "") {
-            showAlert("Please fill in all the fields")
-            if (email == "") {
-                emailLayout.helperText = "Please enter your email"
-            }
+        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            showAlert("fill_all_fields")
 
-            if (password == "") {
-                passwordLayout.helperText = "Please enter your password"
-            }
-
-            if (confirmPasswordEditText.text.toString() == "") {
-                confirmPasswordLayout.helperText = "Please enter your password"
-            }
-
+            emailLayout.helperText = if (email.isEmpty()) getString(R.string.enter_email) else null
+            passwordLayout.helperText = if (password.isEmpty()) getString(R.string.enter_password) else null
+            confirmPasswordLayout.helperText = if (confirmPassword.isEmpty()) getString(R.string.enter_password) else null
             return
         }
 
-        // Perform validation checks
-        if (emailHelperText != "null") {
+        // Assuming you have similar string resources for emailHelperText, passwordHelperText, and confirmPasswordHelperText
+        val emailHelperText = emailLayout.helperText?.toString()
+        val passwordHelperText = passwordLayout.helperText?.toString()
+        val confirmPasswordHelperText = confirmPasswordLayout.helperText?.toString()
+
+        if (emailHelperText != null) {
             showAlert(emailHelperText)
             return
         }
 
-        if (passwordHelperText != "null") {
+        if (passwordHelperText != null) {
             showAlert(passwordHelperText)
             return
         }
 
-        if (confirmPasswordHelperText != "null") {
+        if (confirmPasswordHelperText != null) {
             showAlert(confirmPasswordHelperText)
             return
         }
 
-
-        // Register the user with email and password
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    showAlert("Registration Successful")
-                    val user = auth.currentUser
-
-                    showAlert("Registration Successful")
-
+                    showAlert("registration_successful")
                 } else {
-                    // If sign in fails, display a message to the user.
-                    showAlert("Authentication failed: ${task.exception?.message}")
+                    showAlert(getString(R.string.authentication_failed, task.exception?.message))
                 }
             }
-
-
     }
 
-    private fun showAlert(message: String) {
-        if (message == "Registration Successful") {
+    private fun showAlert(messageKey: String) {
+        val message = getString(resources.getIdentifier(messageKey, "string", packageName))
+
+        if (messageKey == "registration_successful") {
             AlertDialog.Builder(this)
                 .setMessage(message)
-                .setPositiveButton("Go to Login") { dialog, _ ->
+                .setPositiveButton(getString(R.string.go_to_login)) { dialog, _ ->
                     dialog.dismiss()
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
@@ -198,15 +208,13 @@ class RegisterActivity : AppCompatActivity() {
         } else {
             AlertDialog.Builder(this)
                 .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ ->
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
                 .show()
         }
     }
-
-
 
     /**
      * These methods check if the register password is validated or not
@@ -240,17 +248,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     /**
-     * This method checks if the register password's format
-     * @param pwd the password that read from register format
-     * @return true if the password is following the right format (matches the format at the same time: has capital and lower letters at the same time, also with numbers and symbols)
-     * else return false
-     */
-    fun validatePwd(pwd: String): Boolean {
-        val correct = validatePwdLength(pwd) && validatePwdFormat(pwd) && validatePwdNullEmpty(pwd)
-        return correct && pwd.matches("^([A-Z]+|[a-z]+|[0-9]+|[-+_!@#$%^&*.,?]+){8,13}$".toRegex())
-    }
-
-    /**
      * This method checks the register email's format
      * @param email the email that read from register format
      * @return true if the email fits the format that has a @ symbol in string and a dot symbol at last
@@ -268,8 +265,6 @@ class RegisterActivity : AppCompatActivity() {
     fun validateEmailNullEmpty(email: String?): Boolean {
         return !email.isNullOrEmpty()
     }
-
-
 }
 
 
