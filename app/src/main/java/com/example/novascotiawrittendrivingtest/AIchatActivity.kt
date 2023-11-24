@@ -1,9 +1,11 @@
 package com.example.novascotiawrittendrivingtest
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ class AIchatActivity : AppCompatActivity() {
     private lateinit var welcomeTextView: TextView
     private lateinit var messageEditText: EditText
     private lateinit var sendButton: ImageButton
+    private lateinit var backButton: ImageView
     private val messageList = mutableListOf<Message>()
     private lateinit var messageAdapter: ChatAdapter
 
@@ -33,6 +36,8 @@ class AIchatActivity : AppCompatActivity() {
         welcomeTextView = findViewById(R.id.welcome_text)
         messageEditText = findViewById(R.id.message_edit_text)
         sendButton = findViewById(R.id.send_btn)
+        backButton = findViewById(R.id.backButton)
+
 
         // Setup recycler view
         messageAdapter = ChatAdapter(messageList)
@@ -40,11 +45,15 @@ class AIchatActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
 
         sendButton.setOnClickListener {
-            val question = messageEditText.text.toString().trim()
-            addToChat(question, "User")
+            val question = messageEditText.text.toString()
+            addToChat(question, "user")
             messageEditText.text.clear()
             callAPI(question)
             welcomeTextView.visibility = View.GONE
+        }
+
+        backButton.setOnClickListener{
+            navigateToMain()
         }
     }
 
@@ -63,12 +72,12 @@ class AIchatActivity : AppCompatActivity() {
 
     private fun callAPI(question: String) {
         // okhttp
-        messageList.add(Message("Typing... ", "assistant"))
+        messageList.add(Message("assistant ", "Typing... "))
 
         // Create Retrofit instance to call the API
         val retrofit = ClientBuilder.buildService(OpenAIInterface::class.java)
 
-        val messageForSystemRole = Message("system", "You are a helpful assistant for drive license test. You can ask me any questions about the test.")
+        val messageForSystemRole = Message("system", "You are a helpful assistant for drive license test. You can answer questions about driving license test.")
         val messageForQuestion = Message("user", question)
 
         val sendMessageList : List<Message> = listOf(messageForSystemRole, messageForQuestion)
@@ -108,5 +117,11 @@ class AIchatActivity : AppCompatActivity() {
                     addResponse("Failed to load response due to " + t.message)
                 }
             })
+    }
+
+    private fun navigateToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        // Add other extras as needed
+        startActivity(intent)
     }
 }
