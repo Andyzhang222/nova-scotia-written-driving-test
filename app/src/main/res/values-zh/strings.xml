@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">新斯科舍省书面驾驶考试</string>
+    <string name="language_button">英文</string>
+
+    // registry page
+    <string name="enter_your_email">输入您的电子邮件</string>
+    <string name="enter_your_password">输入您的密码</string>
+    <string name="login">登录</string>
+    <string name="not_registered_yet_sign_up">还没有注册？立即注册！</string>
+
+    <string name="email_hint">输入您的电子邮件</string>
+    <string name="password_hint">输入您的密码</string>
+    <string name="confirm_password_hint">重新输入您的密码</string>
+    <string name="register_button">立即注册！</string>
+    <string name="to_login_text">已经注册，立即登录！</string>
+
+    <string name="registration_successful">注册成功</string>
+    <string name="go_to_login">前往登录</string>
+    <string name="ok">确定</string>
+
+    <string name="fill_all_fields">请填写所有字段</string>
+    <string name="enter_email">请输入您的邮箱</string>
+    <string name="enter_password">请输入您的密码</string>
+    <string name="authentication_failed">认证失败：%1$s</string>
+
+    <string name="back">返回</string>
+    <string name="restart">重启</string>
+    <string name="log_out">登出</string>
+    <string-array name="language_options">
+        <item>英文</item>
+        <item>中文</item>
+    </string-array>
+</resources>
