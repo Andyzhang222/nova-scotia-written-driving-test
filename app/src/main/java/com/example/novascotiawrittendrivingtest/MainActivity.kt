@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
-        testLocation=findViewById(R.id.testLocation)
+        testLocation=findViewById(R.id.testLocationContainer)
 
         progressText = findViewById(R.id.progressText)
 

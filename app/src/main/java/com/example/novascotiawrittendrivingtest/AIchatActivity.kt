@@ -32,18 +32,19 @@ class AIchatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aichat)
 
+        // Initialize views
         recyclerView = findViewById(R.id.recycler_view)
         welcomeTextView = findViewById(R.id.welcome_text)
         messageEditText = findViewById(R.id.message_edit_text)
         sendButton = findViewById(R.id.send_btn)
         backButton = findViewById(R.id.backButton)
 
-
         // Setup recycler view
         messageAdapter = ChatAdapter(messageList)
         recyclerView.adapter = messageAdapter
         recyclerView.layoutManager = LinearLayoutManager(this).apply { stackFromEnd = true }
 
+        // Set send button listener
         sendButton.setOnClickListener {
             val question = messageEditText.text.toString()
             addToChat(question, "user")
@@ -52,11 +53,13 @@ class AIchatActivity : AppCompatActivity() {
             welcomeTextView.visibility = View.GONE
         }
 
+        // Set back button listener
         backButton.setOnClickListener{
             navigateToMain()
         }
     }
 
+    // Add the message to the chat on the recycler view
     private fun addToChat(message: String, sentBy: String) {
         runOnUiThread {
             messageList.add(Message(sentBy, message))
@@ -65,21 +68,24 @@ class AIchatActivity : AppCompatActivity() {
         }
     }
 
+    // Add the response to the chat
     private fun addResponse(response: String) {
         messageList.removeAt(messageList.size - 1)
         addToChat(response, "assistant")
     }
 
     private fun callAPI(question: String) {
-        // okhttp
+        // Add a message to show that the assistant is typing
         messageList.add(Message("assistant ", "Typing... "))
 
-        // Create Retrofit instance to call the API
+        // Create Retrofit ins  tance to call the API
         val retrofit = ClientBuilder.buildService(OpenAIInterface::class.java)
 
+        // Create messages to send to the API
         val messageForSystemRole = Message("system", "You are a helpful assistant for drive license test. You can answer questions about driving license test.")
         val messageForQuestion = Message("user", question)
 
+        // Create a list of messages to send to the API
         val sendMessageList : List<Message> = listOf(messageForSystemRole, messageForQuestion)
 
         // Call the API
@@ -97,10 +103,12 @@ class AIchatActivity : AppCompatActivity() {
                             val responseMessage = response.body()?.choices?.get(0)?.message?.content
                             // Check if the forecast is null or empty
                             if (responseMessage.isNullOrEmpty()) {
+                                // If the forecast is null or empty, show the error message
                                 addResponse("No response available")
                                 return
                             }
 
+                            // If the forecast is not null or empty, show the response
                             addResponse(responseMessage)
 
                         } catch (e: Exception) {
@@ -108,6 +116,7 @@ class AIchatActivity : AppCompatActivity() {
                         }
 
                     } else {
+                        // If the API response is not successful, show the error message
                         addResponse("API call unsuccessful: ${response.errorBody()?.string()}")
                     }
                 }
@@ -119,9 +128,11 @@ class AIchatActivity : AppCompatActivity() {
             })
     }
 
+    // Navigate to main activity
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
         // Add other extras as needed
         startActivity(intent)
+        finish()
     }
 }
