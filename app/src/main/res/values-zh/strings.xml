@@ -23,6 +23,20 @@
     <string name="enter_password">请输入您的密码</string>
     <string name="authentication_failed">认证失败：%1$s</string>
 
+
+    // Login page
+    <string name="error_email_password_empty">电子邮件或密码不能为空</string>
+    <string name="login_success">登录成功</string>
+    <string name="login_failed">登录失败</string>
+
+    <string name="alert_ok">好的</string>
+    <string name="login_success_message">登录成功</string>
+
+    // test layout
+    <string name="finish_quiz">完成测验</string>
+    <string name="answer">回答</string>
+    <string name="next_question">下一个问题</string>
+
     <string name="back">返回</string>
     <string name="restart">重启</string>
     <string name="log_out">登出</string>

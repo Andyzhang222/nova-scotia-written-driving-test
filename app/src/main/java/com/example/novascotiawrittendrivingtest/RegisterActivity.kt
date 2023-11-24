@@ -1,5 +1,6 @@
 package com.example.novascotiawrittendrivingtest
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,11 +45,11 @@ class RegisterActivity : AppCompatActivity() {
         languageButton = findViewById(R.id.languageButton)
         languageButton.setOnClickListener {
             if (Locale.getDefault().language == "en") {
-                switchLanguage("zh")
-                languageButton.text = getString(R.string.language_button) // Will be '英文' after the locale change
+                switchLanguage()
+                languageButton.text = getString(R.string.language_button)
             } else {
-                switchLanguage("en")
-                languageButton.text = getString(R.string.language_button) // Will be 'Chinese' after the locale change
+                switchLanguage()
+                languageButton.text = getString(R.string.language_button)
             }
         }
 
@@ -71,14 +72,27 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun switchLanguage(languageCode: String) {
-        val locale = Locale(languageCode)
+    private fun switchLanguage() {
+        val newLang = if (getUserSelectedLanguage() == "en") "zh" else "en"
+        val locale = Locale(newLang)
         Locale.setDefault(locale)
-        val resources = resources
         val config = resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
-        recreate() // Recreate the activity to reflect the change
+
+        // Save the language preference
+        val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString(LANGUAGE_KEY, newLang)
+            apply()
+        }
+
+        recreate() // Recreate the activity to apply the new language
+    }
+
+    fun getUserSelectedLanguage(): String {
+        val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        return sharedPref.getString(LANGUAGE_KEY, "en") ?: "en"
     }
 
 
@@ -264,6 +278,11 @@ class RegisterActivity : AppCompatActivity() {
      */
     fun validateEmailNullEmpty(email: String?): Boolean {
         return !email.isNullOrEmpty()
+    }
+
+    companion object {
+        const val LANGUAGE_KEY = "SelectedLanguage"
+        const val SHARED_PREFS_FILE = "AppSettingsPrefs"
     }
 }
 

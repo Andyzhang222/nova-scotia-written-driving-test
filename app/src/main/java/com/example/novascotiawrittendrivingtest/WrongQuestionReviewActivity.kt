@@ -1,6 +1,7 @@
 package com.example.novascotiawrittendrivingtest
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
+import java.util.Locale
 
 class WrongQuestionReviewActivity : AppCompatActivity() {
 
@@ -49,6 +51,14 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val language = getUserSelectedLanguage()
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
         setContentView(R.layout.driving_test_layout)
 
         database = Firebase.database.reference
@@ -124,6 +134,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
     private fun initializeQuestion() {
         // Submit button is disabled when no answer is selected
         btnSubmit.isEnabled = false
+        btnSubmit.setBackgroundColor(Color.rgb(222, 219, 213))
 
         // Get current question
         val question: Question = questionsList[currentPosition]
@@ -148,7 +159,8 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         setDefault(optionFour)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size) "Finish Quiz" else "Answer"
+        btnSubmit.text = if (currentPosition == questionsList.size) getString(R.string.finish_quiz) else getString(R.string.answer)
+
     }
 
     /**
@@ -174,6 +186,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
             R.id.optionFour -> selectedOptionView(optionFour, 4)
             R.id.btnSubmit -> handleSubmitButtonClicked()
         }
+        btnSubmit.setBackgroundColor(Color.parseColor("#4D6BD9"))
     }
 
     /**
@@ -220,7 +233,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         answerUpdate(question.correctAnswer, R.drawable.correct_option_border_bg)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Next Question"
+        btnSubmit.text = if (currentPosition == questionsList.size - 1) getString(R.string.finish_quiz) else getString(R.string.next_question)
 
         // Reset selected position
         selectedPosition = 0
@@ -276,7 +289,11 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     incorrectQuestionsList = snapshot.children.mapNotNull { it.key }
-                    questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
+                    questionsList = if (getUserSelectedLanguage() == "zh") {
+                        QuestionBank_CN.getQuestionsByIds(incorrectQuestionsList)
+                    } else {
+                        QuestionBank.getQuestionsByIds(incorrectQuestionsList)
+                    }
                 }
             }
 
@@ -284,6 +301,11 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
                 Log.e(TAG, "Database error: $databaseError")
             }
         })
+    }
+
+    fun getUserSelectedLanguage(): String {
+        val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
+        return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
     }
 
     //To do: Uncomment or implement this when needed

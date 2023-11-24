@@ -446,7 +446,7 @@ object QuestionBank_CN {
         ))
     }
 
-    fun getAllQuestions(): ArrayList<Question> {
+    fun getAllQuestionsCN(): ArrayList<Question> {
         return questionsList_CN
     }
 

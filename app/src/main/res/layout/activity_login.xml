@@ -7,6 +7,8 @@
     android:background="@drawable/login_background"
     tools:context=".LoginActivity">
 
+    <include layout="@layout/language_button_layout" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
         android:layout_width="match_parent"
