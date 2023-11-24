@@ -1,5 +1,6 @@
 package com.example.novascotiawrittendrivingtest
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,6 +10,7 @@ import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +24,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val sharedPref = getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
+        val language = sharedPref.getString("SelectedLanguage", Locale.getDefault().language)
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
         setContentView(R.layout.activity_main)
         initialToolBar()
 

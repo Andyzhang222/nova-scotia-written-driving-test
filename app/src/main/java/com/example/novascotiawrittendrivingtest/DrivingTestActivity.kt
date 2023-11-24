@@ -1,9 +1,12 @@
 package com.example.novascotiawrittendrivingtest
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,6 +24,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
+import java.util.Locale
 
 class DrivingTestActivity : AppCompatActivity() {
 
@@ -48,6 +52,14 @@ class DrivingTestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val language = getUserSelectedLanguage()
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
         setContentView(R.layout.driving_test_layout)
 
         val user = Firebase.auth.currentUser
@@ -59,7 +71,12 @@ class DrivingTestActivity : AppCompatActivity() {
         initializeViews()
 
         // initialize questions
-        questionsList = QuestionBank.getAllQuestions()
+        val selectedLanguage = getUserSelectedLanguage()
+        questionsList = if (selectedLanguage == "zh") {
+            QuestionBank_CN.getAllQuestionsCN()
+        } else {
+            QuestionBank.getAllQuestionsEN()
+        }
 
         // initialize question based on last time question position
         database = Firebase.database.reference
@@ -99,6 +116,10 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
+    fun getUserSelectedLanguage(): String {
+        val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
+        return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
+    }
     /**
      * Initialize views
      */
@@ -122,6 +143,7 @@ class DrivingTestActivity : AppCompatActivity() {
     private fun initializeQuestion() {
         // Submit button is disabled when no answer is selected
         btnSubmit.isEnabled = false
+        btnSubmit.setBackgroundColor(Color.rgb(222, 219, 213))
 
         // Get current question
         val question: Question = questionsList[currentPosition]
@@ -145,7 +167,7 @@ class DrivingTestActivity : AppCompatActivity() {
         setDefault(optionFour)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size) "Finish Quiz" else "Answer"
+        btnSubmit.text = if (currentPosition == questionsList.size) getString(R.string.finish_quiz) else getString(R.string.answer)
     }
 
     /**
@@ -171,6 +193,7 @@ class DrivingTestActivity : AppCompatActivity() {
             R.id.optionFour -> selectedOptionView(optionFour, 4)
             R.id.btnSubmit -> handleSubmitButtonClicked()
         }
+        btnSubmit.setBackgroundColor(Color.parseColor("#4D6BD9"))
     }
 
     /**
@@ -223,7 +246,7 @@ class DrivingTestActivity : AppCompatActivity() {
         answerUpdate(question.correctAnswer, R.drawable.correct_option_border_bg)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size - 1) "Finish Quiz" else "Next Question"
+        btnSubmit.text = if (currentPosition == questionsList.size) getString(R.string.finish_quiz) else getString(R.string.next_question)
 
         // Reset selected position
         selectedPosition = 0

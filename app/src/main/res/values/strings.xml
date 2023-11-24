@@ -21,7 +21,22 @@
     <string name="fill_all_fields">Please fill in all the fields</string>
     <string name="enter_email">Please enter your email</string>
     <string name="enter_password">Please enter your password</string>
-    <string name="authentication_failed">Authentication failed: %1$s</string>
+    <string name="authentication_failed">Authentication failed</string>
+
+    // Login page
+    <string name="error_email_password_empty">Email or password cannot be empty</string>
+    <string name="login_success">Login successfully</string>
+    <string name="login_failed">Login failed</string>
+
+    <string name="alert_ok">OK</string>
+    <string name="login_success_message">Login successfully</string>
+
+
+    // test
+    <string name="finish_quiz">Finish Quiz</string>
+    <string name="answer">Answer</string>
+    <string name="next_question">Next Question</string>
+
 
 
     <string name="back" />

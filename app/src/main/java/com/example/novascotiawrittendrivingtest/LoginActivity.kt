@@ -1,43 +1,53 @@
 package com.example.novascotiawrittendrivingtest
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applyLanguageSetting()
+
         setContentView(R.layout.activity_login)
 
         // Initialize Firebase Auth
         auth = Firebase.auth
 
+        // Initialize language change button
+        val languageButton: Button = findViewById(R.id.languageButton)
+        languageButton.setOnClickListener {
+            switchLanguage()
+        }
+
+        // Update language button text based on the current language
+        updateLanguageButtonText()
+
         // Initialize login button
-        val loginButton : Button = findViewById(R.id.loginButton)
+        val loginButton: Button = findViewById(R.id.loginButton)
 
         // Initialize register text
-        val toRegisterText : TextView = findViewById(R.id.toRegisterText)
+        val toRegisterText: TextView = findViewById(R.id.toRegisterText)
 
         // Set login button listener
         loginButton.setOnClickListener {
             // Get email and password from EditText
-            val emailEt : EditText = findViewById(R.id.emailEdit)
-            val passwordEt : EditText = findViewById(R.id.passwordEdit)
+            val emailEt: EditText = findViewById(R.id.emailEdit)
+            val passwordEt: EditText = findViewById(R.id.passwordEdit)
 
-            // Get email and password from EditText
             val email = emailEt.text.toString()
             val password = passwordEt.text.toString()
 
@@ -52,71 +62,80 @@ class LoginActivity : AppCompatActivity() {
             startActivity(registerIntent)
             finish()
         }
-
     }
 
-//    public override fun onStart() {
-//        super.onStart()
-//        // Check if user is signed in (non-null)
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//            Toast.makeText(
-//                baseContext,
-//                "Already logged in.",
-//                Toast.LENGTH_SHORT,
-//            ).show()
-//
-//            // Navigate to main activity if user is already logged in
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
+    private fun applyLanguageSetting() {
+        val language = getUserSelectedLanguage()
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+    private fun switchLanguage() {
+        val newLang = if (getUserSelectedLanguage() == "en") "zh" else "en"
+        saveLanguagePreference(newLang)
+        recreate()
+    }
+
+    private fun saveLanguagePreference(language: String) {
+        val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString(LANGUAGE_KEY, language)
+            apply()
+        }
+    }
+
+    private fun getUserSelectedLanguage(): String {
+        val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
+        return sharedPref.getString(LANGUAGE_KEY, "en") ?: "en"
+    }
+
+    private fun updateLanguageButtonText() {
+        val languageButton: Button = findViewById(R.id.languageButton)
+        languageButton.text = if (getUserSelectedLanguage() == "en") getString(R.string.language_button) else getString(R.string.language_button)
+    }
 
     private fun signIn(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
-            showAlert("Email or password cannot be empty")
+            showAlert(R.string.error_email_password_empty)
             return
         }
 
-        try {
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success
-                        Log.d(TAG, "signInWithEmail:success")
-                        showAlert("Login successfully")
-                    } else {
-                        // If sign in fails
-                        Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        showAlert("Login failed: ${task.exception?.message}")
-                    }
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "signInWithEmail:success")
+                    showAlert(R.string.login_success)
+                } else {
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    showAlert(R.string.login_failed)
                 }
-        } catch (e: Exception) {
-            Log.w(TAG, "signInWithEmail:exception", e)
-            showAlert("Login failed: ${e.message}")
-        }
+            }
     }
 
-    private fun showAlert(message: String) {
-        if (message == "Login successfully") {
-            AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+    private fun showAlert(messageResId: Int) {
+        val message = getString(messageResId)
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+                if (messageResId == R.string.login_success) {
+                    navigateToMainActivity()
                 }
-                .create()
-                .show()
-        } else {
-            AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
-        }
+            }
+            .create().show()
+    }
+
+    private fun navigateToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    companion object {
+        const val LANGUAGE_KEY = "SelectedLanguage"
+        const val SHARED_PREFS_FILE = "AppSettingsPrefs"
     }
 }

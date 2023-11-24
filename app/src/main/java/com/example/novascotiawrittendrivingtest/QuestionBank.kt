@@ -450,7 +450,7 @@ object QuestionBank {
         ))
     }
 
-    fun getAllQuestions(): ArrayList<Question> {
+    fun getAllQuestionsEN(): ArrayList<Question> {
         return questionsList
     }
 
