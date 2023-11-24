@@ -26,7 +26,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBbySywOi2V2XWFMGLGenn10k0f-7AMh-Y" />
+            android:value="AIzaSyALcZOTrN3FbNBhTLYUkIFQ3XSQmQkCLXY" />
         <activity
             android:name=".RegisterActivity"
             android:exported="true" />
