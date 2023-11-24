@@ -42,7 +42,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         createLocationRequest()
         setupLocationCallback()
-        val returnButton = findViewById<Button>(R.id.returnButton)
+        val returnButton = findViewById<Button>(R.id.returnButton)// return to the mainActivity
         returnButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 // Handle the button click to return to MainActivity
@@ -55,6 +55,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    /**
+     * set up the location and the map activity
+     */
     private fun setupLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -64,12 +67,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 findNearestDrivingSchool()
             }
         }
+        /**
+         * location update
+         */
     }   private fun onLocationResult(locationResult: LocationResult) {
         lastKnownLocation = locationResult.lastLocation
         Log.d("LocationUpdate", "Location updated: $lastKnownLocation")
         updateUIWithLocation(lastKnownLocation)
         findNearestDrivingSchool() // This is the correct place to call it
     }
+
+    /**
+     * algorithm to find the nearest driving school
+     */
     private fun findNearestDrivingSchool() {
         if (!::mMap.isInitialized) {
             Log.d("DEBUG", "Map is not initialized yet.") // Debugging log
@@ -84,8 +94,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         val drivingSchools = listOf(
             // Replace this with actual driving school data
-            LatLng(44.3484, -78.7605), // Example location in Nova Scotia
-            LatLng(44.6921, -63.5307)
+            LatLng(44.6921, -63.5307), // test location place
+            LatLng(44.6384, -63.6727),
+            LatLng(44.3897, -64.5376)
         )
 
         val nearestSchool = drivingSchools.minByOrNull { schoolLatLng ->
@@ -110,6 +121,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } ?: Log.d("DEBUG", "No nearest school found")
 
     }
+
+    /**
+     * updated location ui
+     */
     private fun updateUIWithLocation(location: Location?) {
         location?.let {
             val currentLatLng = LatLng(it.latitude, it.longitude)
@@ -118,6 +133,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * updated time interval
+     */
     private fun createLocationRequest() {
         locationRequest = LocationRequest.Builder(10000L) // Interval in milliseconds
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
@@ -125,6 +143,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .build()
     }
 
+    /**
+     * map ready
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         updateLocationUI()
@@ -133,6 +154,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * updated the location ui
+     */
     private fun updateLocationUI() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
@@ -148,6 +172,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * start updated the location, need the user permission
+     */
     private fun startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
@@ -161,21 +188,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show()
         }
     }
-
+    /**
+     * start
+     */
     override fun onResume() {
         super.onResume()
         startLocationUpdates()
     }
-
+    /**
+     * stop
+     */
     override fun onPause() {
         super.onPause()
         stopLocationUpdates()
     }
 
+    /**
+     * stop
+     */
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
+    /**
+     * ask for the permission
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
