@@ -73,19 +73,28 @@ class LoginActivity : AppCompatActivity() {
 //    }
 
     private fun signIn(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
-                    val user = auth.currentUser
-                    showAlert("Login successfully")
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    showAlert("Login failed")
+        if (email.isBlank() || password.isBlank()) {
+            showAlert("Email or password cannot be empty")
+            return
+        }
+
+        try {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success
+                        Log.d(TAG, "signInWithEmail:success")
+                        showAlert("Login successfully")
+                    } else {
+                        // If sign in fails
+                        Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        showAlert("Login failed: ${task.exception?.message}")
+                    }
                 }
-            }
+        } catch (e: Exception) {
+            Log.w(TAG, "signInWithEmail:exception", e)
+            showAlert("Login failed: ${e.message}")
+        }
     }
 
     private fun showAlert(message: String) {
