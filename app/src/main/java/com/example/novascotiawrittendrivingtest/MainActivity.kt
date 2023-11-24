@@ -1,7 +1,9 @@
 package com.example.novascotiawrittendrivingtest
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,14 @@ import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,17 +29,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var progressText: TextView
     private var questionCount = 0
     private lateinit var navToolbar: Toolbar
+    private lateinit var database: DatabaseReference
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initialToolBar()
+
+        val user = Firebase.auth.currentUser
+        user?.let {
+            userId = it.uid
+        }
 
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
         testLocation=findViewById(R.id.testLocationContainer)
 
         progressText = findViewById(R.id.progressText)
+
+        initialToolBar()
 
         practiceTestContainer.setOnClickListener(){
             // Navigate to practice test activity
@@ -59,11 +77,29 @@ class MainActivity : AppCompatActivity() {
     private fun progress() {
         progressBar = findViewById<ProgressBar>(R.id.user_progress_bar)
 
+        var currentPosition = 0
+
         // logic to set progress bar based on question count
-        fun run() {
-            progressBar.progress = questionCount
-            progressText.text = "$questionCount / ${progressBar.max}"
-        }
+        progressBar.progress = questionCount
+
+        database = Firebase.database.reference
+        database.child("users").child(userId).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue<User>()
+                // Do something with the user data
+                if (user != null) {
+                    currentPosition = user.currentQuestionPosition
+                }
+
+                progressText.text = "$currentPosition / ${progressBar.max}"
+                progressBar.progress = currentPosition
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(ContentValues.TAG, "Failed to read user data.", error.toException())
+            }
+        })
+
     }
 
     private fun initialToolBar()
@@ -77,8 +113,12 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         when (item.itemId) {
             R.id.action_log_out -> {
+
+                Firebase.auth.signOut()
+
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
+                finish()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
