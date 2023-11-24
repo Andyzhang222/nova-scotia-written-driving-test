@@ -7,7 +7,6 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+//import com.google.android.libraries.places.api.Places
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -38,21 +38,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         createLocationRequest()
         setupLocationCallback()
-        val returnButton = findViewById<Button>(R.id.returnButton)
-        returnButton.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                // Handle the button click to return to MainActivity
-                val intent = Intent(this@MapsActivity, MainActivity::class.java)
-                startActivity(intent)
-                finish() // Close the MapsActivity
-            }
-        })
 
 
+        val backButton = findViewById<Button>(R.id.backButton)
+        backButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun setupLocationCallback() {
@@ -64,12 +62,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 findNearestDrivingSchool()
             }
         }
-    }   private fun onLocationResult(locationResult: LocationResult) {
+    }
+
+    private fun onLocationResult(locationResult: LocationResult) {
         lastKnownLocation = locationResult.lastLocation
         Log.d("LocationUpdate", "Location updated: $lastKnownLocation")
         updateUIWithLocation(lastKnownLocation)
         findNearestDrivingSchool() // This is the correct place to call it
     }
+
     private fun findNearestDrivingSchool() {
         if (!::mMap.isInitialized) {
             Log.d("DEBUG", "Map is not initialized yet.") // Debugging log
@@ -84,6 +85,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         val drivingSchools = listOf(
             // Replace this with actual driving school data
+//            LatLng(44.6465, -63.5926), // Example location in Nova Scotia
+//            LatLng(44.6407, -63.5696),
+//            LatLng(44.6675, -63.5630),
+//            LatLng(44.6499, -63.6099),
+//            LatLng(44.6521, -63.6502),
+//            LatLng(44.636076, -63.5960803)
             LatLng(44.3484, -78.7605), // Example location in Nova Scotia
             LatLng(44.6921, -63.5307)
         )
@@ -106,15 +113,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d("DEBUG", "Nearest school: ${it.latitude}, ${it.longitude}")
             // Update the UI to show the nearest driving school
             mMap.addMarker(MarkerOptions().position(it).title("Nearest Driving School"))
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 12f))
         } ?: Log.d("DEBUG", "No nearest school found")
-
     }
+
     private fun updateUIWithLocation(location: Location?) {
         location?.let {
             val currentLatLng = LatLng(it.latitude, it.longitude)
+            mMap.clear()
             mMap.addMarker(MarkerOptions().position(currentLatLng).title("Current Location"))
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
         }
     }
 
@@ -124,7 +132,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .setMinUpdateDistanceMeters(5f) // Your desired minimum displacement between location updates
             .build()
     }
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         updateLocationUI()

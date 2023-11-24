@@ -45,13 +45,6 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    // Zhuyu add for firestore
-    implementation("com.google.firebase:firebase-firestore:24.9.1")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.android.gms:play-services-location:21.0.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // Jun Gao add for firebase connection
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
@@ -60,6 +53,18 @@ dependencies {
 
     // Zhuyun add for realtime database library
     implementation("com.google.firebase:firebase-database")
+
+    // Map and Location
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Jun Gao add for retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0")
 
 
 }
