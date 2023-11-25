@@ -22,11 +22,14 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
+import android.app.NotificationChannel
+import android.app.NotificationManager
 
 class MainActivity : AppCompatActivity() {
 
     private  lateinit var practiceTestContainer : CardView
     private lateinit var questionReviewContainer: CardView
+    private lateinit var aiAssistantContainer: CardView
     private lateinit var testLocation: CardView
     private lateinit var progressBar: ProgressBar
     private lateinit var progressText: TextView
@@ -55,12 +58,19 @@ class MainActivity : AppCompatActivity() {
 
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
+        aiAssistantContainer = findViewById(R.id.AI_assistant_container)
         testLocation=findViewById(R.id.testLocationContainer)
 
         progressText = findViewById(R.id.progressText)
 
         initialToolBar()
 
+        aiAssistantContainer.setOnClickListener(){
+            // Navigate to practice test activity
+            val practiceTestIntent = Intent(this, AIchatActivity::class.java)
+            startActivity(practiceTestIntent)
+            finish()
+        }
         practiceTestContainer.setOnClickListener(){
             // Navigate to practice test activity
             val practiceTestIntent = Intent(this, DrivingTestActivity::class.java)
@@ -83,6 +93,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         progress()
+
+        // Notification implementation
+        createNotificationChannel()
+
+        // Schedule notifications
+        val notificationManager = NotificationManager(this)
+        notificationManager.scheduleNotification()
     }
 
     // Will be completed once question part is done
@@ -140,5 +157,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    // Notification channel
+    private fun createNotificationChannel() {
+        val channelId = "default_channel"
+        val channelName = "Default Channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, channelName, importance).apply {
+            description = "Channel description" // Set your channel description here
+        }
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }
