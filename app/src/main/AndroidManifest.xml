@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -18,36 +13,6 @@
         android:theme="@style/Theme.NovaScotiaWrittenDrivingTest"
         tools:targetApi="31">
         <activity
-            android:name=".EmptyWrongActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AIchatActivity"
-            android:exported="true" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyALcZOTrN3FbNBhTLYUkIFQ3XSQmQkCLXY" />
-
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="true" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DrivingTestActivity"
-            android:exported="true" />
-        <activity
-            android:name=".WrongQuestionReviewActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MapActivity"
-            android:exported="true">
-        </activity>
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -56,8 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name=".NotificationReceiver" />
     </application>
 
 </manifest>
