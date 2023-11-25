@@ -21,7 +21,7 @@
     <string name="fill_all_fields">Please fill in all the fields</string>
     <string name="enter_email">Please enter your email</string>
     <string name="enter_password">Please enter your password</string>
-    <string name="authentication_failed">Authentication failed</string>
+    <string name="authentication_failed">Authentication failed: %1$s</string>
 
     // Login page
     <string name="error_email_password_empty">Email or password cannot be empty</string>

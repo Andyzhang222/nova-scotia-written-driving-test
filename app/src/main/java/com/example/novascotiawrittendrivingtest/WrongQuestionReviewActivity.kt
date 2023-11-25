@@ -15,6 +15,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.novascotiawrittendrivingtest.question.Question
+import com.example.novascotiawrittendrivingtest.question.QuestionBank
+import com.example.novascotiawrittendrivingtest.question.QuestionBank_CN
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot

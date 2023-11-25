@@ -36,11 +36,12 @@ class MainActivity : AppCompatActivity() {
     private var questionCount = 0
     private lateinit var navToolbar: Toolbar
     private lateinit var database: DatabaseReference
-    private lateinit var userId: String
+    private var userId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Set language
         val sharedPref = getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
         val language = sharedPref.getString("SelectedLanguage", Locale.getDefault().language)
         val locale = Locale(language)
@@ -49,13 +50,24 @@ class MainActivity : AppCompatActivity() {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
 
+        // Set content view
         setContentView(R.layout.activity_main)
 
+        // Initialize Firebase Auth to check if user is logged in
         val user = Firebase.auth.currentUser
-        user?.let {
-            userId = it.uid
+
+        // If user is not logged in, navigate to login activity, else get user id
+        if (user == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else{
+            user.let {
+                userId = it.uid
+            }
         }
 
+        // Get the navigation
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
         aiAssistantContainer = findViewById(R.id.AI_assistant_container)
