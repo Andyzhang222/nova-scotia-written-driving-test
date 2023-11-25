@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <include layout="@layout/language_button_layout" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
         android:layout_width="match_parent"
@@ -47,6 +45,7 @@
             android:hint="@string/enter_your_password"
             android:inputType="textPassword"
             android:textSize="20sp" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -79,7 +78,6 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/register_background"
-        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +95,8 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/imageView10"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include layout="@layout/language_button_layout"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
