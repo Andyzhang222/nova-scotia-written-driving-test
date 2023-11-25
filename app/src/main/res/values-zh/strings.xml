@@ -36,6 +36,25 @@
     <string name="finish_quiz">完成测验</string>
     <string name="answer">回答</string>
     <string name="next_question">下一个问题</string>
+    <string name="wrong_empty">没有错题哦</string>
+
+    // Main activity page
+    <string name="main_slogan">成为安全的驾驶员！</string>
+    <string name="ai_assistant">AI 小助手</string>
+    <string name="practice_test">练习</string>
+    <string name="review">复习</string>
+    <string name="test_location">考试地点</string>
+
+    // AI assistant page
+    <string name="welcome_text">欢迎</string>
+    <string name="send_button">发送</string>
+    <string name="typing">正在输入...</string>
+    <string name="no_response">无可用响应</string>
+    <string name="api_call_unsuccessful">API调用失败:</string>
+    <string name="failed_to_load_response">由于以下原因加载响应失败</string>
+    <string name="ai_ask_question">对于考试有任何问题，有AI帮助你，请输入你的问题？</string>
+    <string name="ai_write_here">请在这里输入 </string>
+
 
     <string name="back">返回</string>
     <string name="restart">重启</string>

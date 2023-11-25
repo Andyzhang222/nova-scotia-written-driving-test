@@ -18,6 +18,9 @@
         android:theme="@style/Theme.NovaScotiaWrittenDrivingTest"
         tools:targetApi="31">
         <activity
+            android:name=".EmptyWrongActivity"
+            android:exported="false" />
+        <activity
             android:name=".AIchatActivity"
             android:exported="true" />
 
@@ -27,6 +30,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyALcZOTrN3FbNBhTLYUkIFQ3XSQmQkCLXY" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="true" />
@@ -41,8 +45,7 @@
             android:exported="true" />
         <activity
             android:name=".MapsActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -53,8 +56,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NotificationReceiver"/>
-
+        <receiver android:name=".NotificationReceiver" />
     </application>
 
 </manifest>
