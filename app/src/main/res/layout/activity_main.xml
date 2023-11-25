@@ -41,6 +41,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/AI_assistant_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
@@ -60,11 +61,11 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_book" />
+                    android:src="@drawable/ic_ai_chat" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Question Bank"
+                    android:text="AI Assistant"
                     android:layout_gravity="center_horizontal"
                     android:textSize="18sp"
                     android:textStyle="bold"

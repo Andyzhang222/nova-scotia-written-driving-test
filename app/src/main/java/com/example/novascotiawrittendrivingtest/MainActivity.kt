@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private  lateinit var practiceTestContainer : CardView
     private lateinit var questionReviewContainer: CardView
+    private lateinit var aiAssistantContainer: CardView
     private lateinit var testLocation: CardView
     private lateinit var progressBar: ProgressBar
     private lateinit var progressText: TextView
@@ -55,12 +56,19 @@ class MainActivity : AppCompatActivity() {
 
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
+        aiAssistantContainer = findViewById(R.id.AI_assistant_container)
         testLocation=findViewById(R.id.testLocationContainer)
 
         progressText = findViewById(R.id.progressText)
 
         initialToolBar()
 
+        aiAssistantContainer.setOnClickListener(){
+            // Navigate to practice test activity
+            val practiceTestIntent = Intent(this, AIchatActivity::class.java)
+            startActivity(practiceTestIntent)
+            finish()
+        }
         practiceTestContainer.setOnClickListener(){
             // Navigate to practice test activity
             val practiceTestIntent = Intent(this, DrivingTestActivity::class.java)
