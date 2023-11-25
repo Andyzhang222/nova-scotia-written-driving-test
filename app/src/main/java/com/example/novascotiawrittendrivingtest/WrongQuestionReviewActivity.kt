@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.firebase.Firebase
@@ -82,13 +83,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
                 if (user != null) {
                     currentPosition = user.currentPositionInWrongQuestion
                 }
-                if (currentPosition == 0) {
-                    val intent = Intent(this@WrongQuestionReviewActivity, EmptyWrongActivity::class.java)
-                    startActivity(intent)
-                    finish() // Optional: Call finish() if you don't want to return to this activity on pressing back
-                } else {
                     initializeQuestion()
-                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -155,7 +150,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         // Update progress bar and text
         progressBar.max = questionsList.size
         progressBar.progress = currentPosition
-        progressText.text = "$currentPosition / ${incorrectQuestionsList.size}"
+        progressText.text = "${currentPosition}/ ${incorrectQuestionsList.size}"
 
         // Set default option view layout
         setDefault(optionOne)
@@ -201,8 +196,39 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         // If there is no selected option, question is being answered, go next question, else evaluate selected option
         if (selectedPosition == 0) {
             handleNextQuestion()
+            val question = questionsList[currentPosition]
+
+            /////
+//            if (question.correctAnswer != selectedPosition)
+//            {
+//                removeQuestionFromIncorrectList(userId, question.id.toString())
+//                if(currentPosition>0) {
+//                    currentPosition--
+//                }
+//                updateUserInFirebase(userId, currentPosition)
+//            }
         } else {
             evaluateSelectedOption()
+
+            if (currentPosition == questionsList.size - 1) {
+                // Create an AlertDialog builder
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(getString(R.string.quiz_complete))
+                builder.setMessage(getString(R.string.quiz_complete_message))
+
+                // Add the buttons
+                builder.setPositiveButton("Yes") { dialog, which ->
+                    // User clicked 'Yes' button. Reset the questions and restart the quiz.
+                    currentPosition = 0
+                    correctAnswer = 0
+                    initializeQuestion()
+                    updateUserInFirebase(userId, currentPosition)
+                }
+
+                // Create and show the AlertDialog
+                val dialog = builder.create()
+                dialog.show()
+            }
         }
     }
 
@@ -242,7 +268,25 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
 
         // Reset selected position
         selectedPosition = 0
+
+        progressBar.progress = currentPosition + 1
+        progressText.text = "${currentPosition + 1}/ ${incorrectQuestionsList.size}"
     }
+
+//    private fun removeQuestionFromIncorrectList(userId: String, questionId: String) {
+//        // Remove question ID from the local list
+//        incorrectQuestionsList = incorrectQuestionsList.filter { it != questionId }
+//
+//        // Update Firebase
+//        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions").child(questionId)
+//        incorrectQuestionsRef.removeValue()
+//            .addOnSuccessListener {
+//                Log.d(TAG, "Question removed successfully from incorrect list.")
+//            }
+//            .addOnFailureListener {
+//                Log.e(TAG, "Failed to remove question from incorrect list.", it)
+//            }
+//    }
 
     /**
      * Set selected option view

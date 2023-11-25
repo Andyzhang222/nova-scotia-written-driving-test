@@ -54,6 +54,10 @@
     <string name="answer">Answer</string>
     <string name="next_question">Next Question</string>
     <string name="wrong_empty">No wrong questions</string>
+    <string name="quiz_complete">Quiz Complete</string>
+    <string name="quiz_complete_message">You have completed the quiz. Do you want to start over?</string>
+
+
 
     // Map page
     <string name="back_home">Back to Home</string>
