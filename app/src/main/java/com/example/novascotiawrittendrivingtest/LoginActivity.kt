@@ -64,6 +64,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Applies the language setting based on saved user preference
+     */
     private fun applyLanguageSetting() {
         val language = getUserSelectedLanguage()
         val locale = Locale(language)
@@ -73,12 +76,18 @@ class LoginActivity : AppCompatActivity() {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 
+    /**
+     * Switches the app language and saves the preference
+     */
     private fun switchLanguage() {
         val newLang = if (getUserSelectedLanguage() == "en") "zh" else "en"
         saveLanguagePreference(newLang)
         recreate()
     }
 
+    /**
+     * Saves the user's language preference in shared preferences
+     */
     private fun saveLanguagePreference(language: String) {
         val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
@@ -87,16 +96,25 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Retrieves the user's saved language preference
+     */
     private fun getUserSelectedLanguage(): String {
         val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         return sharedPref.getString(LANGUAGE_KEY, "en") ?: "en"
     }
 
+    /**
+     * Updates the language button's text based on the current language
+     */
     private fun updateLanguageButtonText() {
         val languageButton: Button = findViewById(R.id.languageButton)
         languageButton.text = if (getUserSelectedLanguage() == "en") getString(R.string.language_button) else getString(R.string.language_button)
     }
 
+    /**
+     * Signs in the user with Firebase Authentication and handles success or failure
+     */
     private fun signIn(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             showAlert(R.string.error_email_password_empty)
@@ -115,6 +133,9 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Displays an alert dialog with a message based on the result of the sign-in process
+     */
     private fun showAlert(messageResId: Int) {
         val message = getString(messageResId)
         AlertDialog.Builder(this)
@@ -128,12 +149,18 @@ class LoginActivity : AppCompatActivity() {
             .create().show()
     }
 
+    /**
+     * Navigates to the main activity after successful sign-in
+     */
     private fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
+    /**
+     * Constants for shared preferences keys
+     */
     companion object {
         const val LANGUAGE_KEY = "SelectedLanguage"
         const val SHARED_PREFS_FILE = "AppSettingsPrefs"
