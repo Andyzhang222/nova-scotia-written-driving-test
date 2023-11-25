@@ -89,13 +89,38 @@ class MainActivity : AppCompatActivity() {
             startActivity(practiceTestIntent)
             finish()
         }
+        database = Firebase.database.reference
 
-        questionReviewContainer.setOnClickListener(){
-            // Navigate to question review activity
-            val questionReviewIntent = Intent(this, WrongQuestionReviewActivity::class.java)
-            startActivity(questionReviewIntent)
-            finish()
-        }
+        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
+
+        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    // Data exists
+                    questionReviewContainer.setOnClickListener {
+                        // Navigate to question review activity
+                        val questionReviewIntent = Intent(this@MainActivity, WrongQuestionReviewActivity::class.java)
+                        startActivity(questionReviewIntent)
+                        finish()
+                    }
+                } else {
+                    // Data is null or the path doesn't exist
+                    questionReviewContainer.setOnClickListener {
+                        // Navigate to question review activity
+                        val questionReviewIntent = Intent(this@MainActivity, EmptyWrongActivity::class.java)
+                        startActivity(questionReviewIntent)
+                        finish()
+                    }
+
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors
+            }
+        })
+
+
 
        testLocation.setOnClickListener(){
             // Navigate to question review activity

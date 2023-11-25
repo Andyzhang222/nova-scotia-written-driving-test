@@ -36,5 +36,6 @@ class EmptyWrongActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         // Add other extras as needed
         startActivity(intent)
+        finish()
     }
 }

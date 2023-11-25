@@ -37,6 +37,8 @@
     <string name="answer">回答</string>
     <string name="next_question">下一个问题</string>
     <string name="wrong_empty">没有错题哦</string>
+    <string name="quiz_complete">测验完成</string>
+    <string name="quiz_complete_message">您已经完成了测验。您想重新开始吗？</string>
 
     // Main activity page
     <string name="main_slogan">成为安全的驾驶员！</string>

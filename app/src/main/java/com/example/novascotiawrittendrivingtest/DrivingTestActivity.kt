@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.novascotiawrittendrivingtest.question.Question
@@ -113,11 +114,12 @@ class DrivingTestActivity : AppCompatActivity() {
         restartButton.setOnClickListener {
             currentPosition = 0
             correctAnswer = 0
+            updateUserInFirebase(userId, currentPosition)
             initializeQuestion()
         }
     }
 
-    fun getUserSelectedLanguage(): String {
+    private fun getUserSelectedLanguage(): String {
         val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
         return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
     }
@@ -168,7 +170,7 @@ class DrivingTestActivity : AppCompatActivity() {
         setDefault(optionFour)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size) getString(R.string.finish_quiz) else getString(R.string.answer)
+        btnSubmit.text = getString(R.string.answer)
     }
 
     /**
@@ -206,6 +208,28 @@ class DrivingTestActivity : AppCompatActivity() {
             handleNextQuestion()
         } else {
             evaluateSelectedOption()
+
+
+            if (currentPosition == 39) {
+                // Create an AlertDialog builder
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(getString(R.string.quiz_complete))
+                builder.setMessage(getString(R.string.quiz_complete_message))
+
+                // Add the buttons
+                builder.setPositiveButton("Yes") { dialog, which ->
+                    // User clicked 'Yes' button. Reset the questions and restart the quiz.
+                    currentPosition = 0
+                    correctAnswer = 0
+                    initializeQuestion()
+                    updateUserInFirebase(userId, currentPosition)
+                }
+
+                // Create and show the AlertDialog
+                val dialog = builder.create()
+                dialog.show()
+            }
+
         }
     }
 
@@ -247,10 +271,13 @@ class DrivingTestActivity : AppCompatActivity() {
         answerUpdate(question.correctAnswer, R.drawable.correct_option_border_bg)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size) getString(R.string.finish_quiz) else getString(R.string.next_question)
+        btnSubmit.text = if (currentPosition == questionsList.size - 1) getString(R.string.finish_quiz) else getString(R.string.next_question)
 
         // Reset selected position
         selectedPosition = 0
+
+        progressBar.progress = currentPosition + 1
+        progressText.text = "${currentPosition + 1}/ ${progressBar.max}"
     }
 
     /**
