@@ -92,8 +92,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         val drivingSchools = listOf(
             LatLng(44.6921, -63.5307), // test location place
-            LatLng(44.6384, -63.6727),
-            LatLng(44.3897, -64.5376)
+            LatLng(44.6384, -63.6727)
         )
 
         val nearestSchool = drivingSchools.minByOrNull { schoolLatLng ->
