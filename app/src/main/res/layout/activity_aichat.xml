@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:text="Any question about driving test? Ask here!"
+        android:text="@string/ai_ask_question"
         android:textSize="28dp" />
 
     <RelativeLayout
@@ -57,7 +57,7 @@
             android:layout_centerInParent="true"
             android:layout_toLeftOf="@id/send_btn"
             android:background="@drawable/default_option_border_bg"
-            android:hint="Write here "
+            android:hint="@string/ai_write_here"
             android:padding="16dp" />
 
         <ImageButton

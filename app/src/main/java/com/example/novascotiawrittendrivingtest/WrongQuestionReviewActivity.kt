@@ -82,8 +82,13 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
                 if (user != null) {
                     currentPosition = user.currentPositionInWrongQuestion
                 }
-
-                initializeQuestion()
+                if (currentPosition == 0) {
+                    val intent = Intent(this@WrongQuestionReviewActivity, EmptyWrongActivity::class.java)
+                    startActivity(intent)
+                    finish() // Optional: Call finish() if you don't want to return to this activity on pressing back
+                } else {
+                    initializeQuestion()
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

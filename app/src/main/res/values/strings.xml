@@ -31,17 +31,35 @@
     <string name="alert_ok">OK</string>
     <string name="login_success_message">Login successfully</string>
 
+    // Main activity page
+    <string name="main_slogan">To be a safe driver!</string>
+    <string name="ai_assistant">AI Assistant</string>
+    <string name="practice_test">Practice Test</string>
+    <string name="review">Review</string>
+    <string name="test_location">Test Location</string>
+
+    // AI assistant page
+    <string name="welcome_text">Welcome</string>
+    <string name="send_button">Send</string>
+    <string name="typing">Typing...</string>
+    <string name="no_response">No response available</string>
+    <string name="api_call_unsuccessful">API call unsuccessful:</string>
+    <string name="failed_to_load_response">Failed to load response due to</string>
+    <string name="ai_ask_question">Any question about driving test? Ask here!</string>
+    <string name="ai_write_here">Write here </string>
+
 
     // test
     <string name="finish_quiz">Finish Quiz</string>
     <string name="answer">Answer</string>
     <string name="next_question">Next Question</string>
-
+    <string name="wrong_empty">No wrong questions</string>
 
 
     <string name="back" />
     <string name="restart" />
     <string name="log_out">Log Out</string>
+
     <string-array name="language_options">
         <item>English</item>
         <item>Chinese</item>
