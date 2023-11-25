@@ -91,9 +91,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             return // mMap not initialized, return early
         }
         val drivingSchools = listOf(
-
-            LatLng(44.3484, -78.7605),
-            LatLng(44.6921, -63.5307)
+            LatLng(44.6921, -63.5307), // test location place
+            LatLng(44.6384, -63.6727),
+            LatLng(44.3897, -64.5376)
         )
 
         val nearestSchool = drivingSchools.minByOrNull { schoolLatLng ->
