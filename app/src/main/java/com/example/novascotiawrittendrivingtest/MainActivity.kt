@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
+import android.app.NotificationChannel
+import android.app.NotificationManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -83,6 +85,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         progress()
+
+        // Notification implementation
+        createNotificationChannel()
+
+        // Schedule notifications
+        val notificationManager = NotificationManager(this)
+        notificationManager.scheduleNotification()
     }
 
     // Will be completed once question part is done
@@ -140,5 +149,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    // Notification channel
+    private fun createNotificationChannel() {
+        val channelId = "default_channel"
+        val channelName = "Default Channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, channelName, importance).apply {
+            description = "Channel description" // Set your channel description here
+        }
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }
