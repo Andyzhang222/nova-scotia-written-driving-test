@@ -1,10 +1,17 @@
 package com.example.novascotiawrittendrivingtest
 
+/*
+    Object to store and manage a bank of questions for a driving test
+ */
 object QuestionBank {
 
+    // ArrayList to store all the questions
     val questionsList = ArrayList<Question>()
 
+
     init {
+        // Add various questions to the question list, each with its own details
+        // Each question includes an ID, question text, image resource, options, and the correct answer index
         questionsList.add(Question(
             1,
             "What does this sign mean?",
@@ -450,10 +457,16 @@ object QuestionBank {
         ))
     }
 
+    /**
+     * Function to return all questions
+     */
     fun getAllQuestionsEN(): ArrayList<Question> {
         return questionsList
     }
 
+    /**
+     * Function to return a list of questions based on their IDs
+     */
     fun getQuestionsByIds(questionIds: List<String>): ArrayList<Question> {
         // Convert String IDs to Int
         val intIds = questionIds.mapNotNull { it.toIntOrNull() }

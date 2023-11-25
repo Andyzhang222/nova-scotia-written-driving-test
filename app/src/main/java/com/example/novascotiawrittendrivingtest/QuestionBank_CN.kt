@@ -1,10 +1,16 @@
 package com.example.novascotiawrittendrivingtest
 
+/*
+    Object to store and manage a bank of questions for a driving test in Chinese
+ */
 object QuestionBank_CN {
 
+    // ArrayList to store all the questions
     val questionsList_CN = ArrayList<Question>()
 
     init {
+        // Add various questions to the question list, each with its own details
+        // Each question includes an ID, question text, image resource, options, and the correct answer index
         questionsList_CN.add(Question(
             1,
             "请问，这张图片展示的标志代表什么?",
@@ -446,10 +452,16 @@ object QuestionBank_CN {
         ))
     }
 
+    /**
+     * Function to return all questions
+     */
     fun getAllQuestionsCN(): ArrayList<Question> {
         return questionsList_CN
     }
 
+    /**
+     * Function to return a list of questions based on their IDs
+     */
     fun getQuestionsByIds(questionIds: List<String>): ArrayList<Question> {
         // Convert String IDs to Int
         val intIds = questionIds.mapNotNull { it.toIntOrNull() }

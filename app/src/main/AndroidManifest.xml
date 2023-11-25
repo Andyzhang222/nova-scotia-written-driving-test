@@ -44,8 +44,9 @@
             android:name=".WrongQuestionReviewActivity"
             android:exported="true" />
         <activity
-            android:name=".MapsActivity"
-            android:exported="true"></activity>
+            android:name=".MapActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -5,8 +5,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 
+/*
+     Class responsible for managing notifications
+ */
 class NotificationManager(private val context: Context) {
 
+    // Function to schedule a notification
     fun scheduleNotification() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java)
@@ -18,7 +22,7 @@ class NotificationManager(private val context: Context) {
         val intervalMillis = 60_000 // temporarily set to every minute
         val triggerAtMillis = System.currentTimeMillis() + intervalMillis
 
-        // Set a repeating alarm that triggers a notification
+        // Set a repeating alarm that triggers the NotificationReceiver at the defined intervals
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             triggerAtMillis,

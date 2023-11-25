@@ -76,6 +76,9 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     *  Switches the app language and recreates the activity
+     */
     private fun switchLanguage() {
         val newLang = if (getUserSelectedLanguage() == "en") "zh" else "en"
         val locale = Locale(newLang)
@@ -94,6 +97,9 @@ class RegisterActivity : AppCompatActivity() {
         recreate() // Recreate the activity to apply the new language
     }
 
+    /**
+     * Retrieves the user's saved language preference
+     */
     fun getUserSelectedLanguage(): String {
         val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         return sharedPref.getString(LANGUAGE_KEY, "en") ?: "en"
@@ -147,6 +153,9 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Performs user registration with Firebase Authentication
+     */
     private fun performRegistration() {
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
@@ -191,6 +200,9 @@ class RegisterActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Shows an alert dialog with a message
+     */
     private fun showAlert(messageKey: String) {
         val message = getString(resources.getIdentifier(messageKey, "string", packageName))
 
