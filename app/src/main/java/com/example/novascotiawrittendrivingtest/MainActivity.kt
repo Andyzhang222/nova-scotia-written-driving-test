@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
        testLocation.setOnClickListener(){
             // Navigate to question review activity
-            val testLocation= Intent(this, MapsActivity::class.java)
+            val testLocation= Intent(this, MapActivity::class.java)
             startActivity(testLocation)
             finish()
         }

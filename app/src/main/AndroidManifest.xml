@@ -40,7 +40,7 @@
             android:name=".WrongQuestionReviewActivity"
             android:exported="true" />
         <activity
-            android:name=".MapsActivity"
+            android:name=".MapActivity"
             android:exported="true">
         </activity>
         <activity

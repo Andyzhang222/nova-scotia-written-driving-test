@@ -20,8 +20,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    // Late-initialized variables for Google Map and location services
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -39,7 +40,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // Create location request with specific criteria
         createLocationRequest()
+        // Setup for handling location updates
         setupLocationCallback()
 
         val backButton = findViewById<Button>(R.id.backButton)
@@ -50,6 +53,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Sets up the location callback for handling location updates
+     */
     private fun setupLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -61,6 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
     private fun onLocationResult(locationResult: LocationResult) {
         lastKnownLocation = locationResult.lastLocation
         Log.d("LocationUpdate", "Location updated: $lastKnownLocation")
@@ -68,6 +75,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         findNearestDrivingSchool() // This is the correct place to call it
     }
 
+    /**
+     * Finds the nearest driving school based on current location
+     */
     private fun findNearestDrivingSchool() {
         if (!::mMap.isInitialized) {
             Log.d("DEBUG", "Map is not initialized yet.") // Debugging log
@@ -108,6 +118,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } ?: Log.d("DEBUG", "No nearest school found")
     }
 
+    /**
+     * Updates the UI with the current location
+     */
     private fun updateUIWithLocation(location: Location?) {
         location?.let {
             val currentLatLng = LatLng(it.latitude, it.longitude)
@@ -117,12 +130,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Creates a location request with specific parameters
+     */
     private fun createLocationRequest() {
         locationRequest = LocationRequest.Builder(10000L) // Interval in milliseconds
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
             .setMinUpdateDistanceMeters(5f) // Your desired minimum displacement between location updates
             .build()
     }
+
+    /**
+     * Called when the map is ready for use
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         updateLocationUI()
@@ -131,6 +151,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Updates the location UI based on permission checks
+     */
     private fun updateLocationUI() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
@@ -146,6 +169,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Starts receiving location updates
+     */
     private fun startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
@@ -160,6 +186,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Lifecycle methods to handle location updates when the app is paused or resumed
+     */
     override fun onResume() {
         super.onResume()
         startLocationUpdates()
@@ -170,10 +199,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         stopLocationUpdates()
     }
 
+    /**
+     * Stops receiving location updates
+     */
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
+    /**
+     *  Handles the result of the permission request
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
