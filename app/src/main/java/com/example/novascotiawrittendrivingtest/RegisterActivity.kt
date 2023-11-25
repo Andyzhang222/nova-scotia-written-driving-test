@@ -16,6 +16,7 @@ import java.util.Locale
 
 class RegisterActivity : AppCompatActivity() {
 
+    // Late-initialized properties for UI elements
     private lateinit var emailEditText: EditText
     private lateinit var emailLayout: TextInputLayout
     private lateinit var passwordEditText: EditText
@@ -25,6 +26,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var registerButton: Button
     private lateinit var auth: FirebaseAuth
 
+    // Language settings
     private var currentLanguage = "en"
     private lateinit var languageButton: Button
 
@@ -32,16 +34,18 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        // Firebase Auth initialization
         auth = Firebase.auth;
 
+        // Navigates to the login screen when clicked
         val toLoginTextView : TextView = findViewById(R.id.toLoginTextView)
-
         toLoginTextView.setOnClickListener {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
             finish()
         }
 
+        // Language switching setup
         languageButton = findViewById(R.id.languageButton)
         languageButton.setOnClickListener {
             if (Locale.getDefault().language == "en") {
@@ -94,24 +98,6 @@ class RegisterActivity : AppCompatActivity() {
         val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         return sharedPref.getString(LANGUAGE_KEY, "en") ?: "en"
     }
-
-
-//    public override fun onStart() {
-//        super.onStart()
-//        // Check if user is signed in (non-null)
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//            Toast.makeText(
-//                baseContext,
-//                "Already logged in.",
-//                Toast.LENGTH_SHORT,
-//            ).show()
-//
-//            // Navigate to main activity if user is already logged in
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
 
     private fun emailFocusListener() {
         emailEditText.setOnFocusChangeListener { _, hasFocus ->
@@ -280,6 +266,9 @@ class RegisterActivity : AppCompatActivity() {
         return !email.isNullOrEmpty()
     }
 
+    /**
+     * Constants for shared preferences keys
+     */
     companion object {
         const val LANGUAGE_KEY = "SelectedLanguage"
         const val SHARED_PREFS_FILE = "AppSettingsPrefs"

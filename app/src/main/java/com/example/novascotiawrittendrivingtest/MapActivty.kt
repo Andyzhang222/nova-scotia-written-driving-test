@@ -19,7 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-//import com.google.android.libraries.places.api.Places
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -38,12 +37,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         createLocationRequest()
         setupLocationCallback()
-
 
         val backButton = findViewById<Button>(R.id.backButton)
         backButton.setOnClickListener {
@@ -84,14 +81,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             return // mMap not initialized, return early
         }
         val drivingSchools = listOf(
-            // Replace this with actual driving school data
-//            LatLng(44.6465, -63.5926), // Example location in Nova Scotia
-//            LatLng(44.6407, -63.5696),
-//            LatLng(44.6675, -63.5630),
-//            LatLng(44.6499, -63.6099),
-//            LatLng(44.6521, -63.6502),
-//            LatLng(44.636076, -63.5960803)
-            LatLng(44.3484, -78.7605), // Example location in Nova Scotia
+
+            LatLng(44.3484, -78.7605),
             LatLng(44.6921, -63.5307)
         )
 
