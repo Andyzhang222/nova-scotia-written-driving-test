@@ -35,7 +35,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         // Firebase Auth initialization
-        auth = Firebase.auth;
+        auth = Firebase.auth
 
         // Navigates to the login screen when clicked
         val toLoginTextView : TextView = findViewById(R.id.toLoginTextView)
@@ -100,11 +100,14 @@ class RegisterActivity : AppCompatActivity() {
     /**
      * Retrieves the user's saved language preference
      */
-    fun getUserSelectedLanguage(): String {
+    private fun getUserSelectedLanguage(): String {
         val sharedPref = this.getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
         return sharedPref.getString(LANGUAGE_KEY, "en") ?: "en"
     }
 
+    /**
+     * Add focus listener to email edit text to show if the email is valid or not
+     */
     private fun emailFocusListener() {
         emailEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
@@ -120,10 +123,16 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Add focus listener to password edit text to show if the password is valid or not
+     */
     private fun passwordFocusListener() {
         passwordEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
+                // Check if the password is valid
                 val password = passwordEditText.text.toString()
+
+                // Check if the password is valid
                 if (!validatePwdNullEmpty(password)) {
                     passwordLayout.helperText = "Please enter your password"
                 } else if (!validatePwdLength(password)) {
@@ -137,10 +146,16 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Add focus listener to confirm password edit text to show if the password is valid or not
+     */
     private fun confirmPasswordFocusListener() {
         confirmPasswordEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
+                // Check if the password is valid
                 val password = passwordEditText.text.toString()
+
+                // Check if the password is valid
                 val rePassword = confirmPasswordEditText.text.toString()
                 if (!validatePwdNullEmpty(rePassword)) {
                     confirmPasswordLayout.helperText = "Please enter your password"
@@ -157,13 +172,16 @@ class RegisterActivity : AppCompatActivity() {
      * Performs user registration with Firebase Authentication
      */
     private fun performRegistration() {
+        // Get the email and password from the EditTexts
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
         val confirmPassword = confirmPasswordEditText.text.toString()
 
+        // Check if any of the fields are empty
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             showAlert("fill_all_fields")
 
+            // Set the helper text for each field
             emailLayout.helperText = if (email.isEmpty()) getString(R.string.enter_email) else null
             passwordLayout.helperText = if (password.isEmpty()) getString(R.string.enter_password) else null
             confirmPasswordLayout.helperText = if (confirmPassword.isEmpty()) getString(R.string.enter_password) else null
@@ -175,21 +193,21 @@ class RegisterActivity : AppCompatActivity() {
         val passwordHelperText = passwordLayout.helperText?.toString()
         val confirmPasswordHelperText = confirmPasswordLayout.helperText?.toString()
 
+        // Check if any of the helper texts are not null
         if (emailHelperText != null) {
             showAlert(emailHelperText)
             return
         }
-
         if (passwordHelperText != null) {
             showAlert(passwordHelperText)
             return
         }
-
         if (confirmPasswordHelperText != null) {
             showAlert(confirmPasswordHelperText)
             return
         }
 
+        // Check if the passwords match
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -234,7 +252,7 @@ class RegisterActivity : AppCompatActivity() {
      * @return true if the password contains at least one capital letter, one lower case, one symbol,
      *         and the length is less than 13 and more than 8
      */
-    fun validatePwdNullEmpty(pwd: String?): Boolean {
+    private fun validatePwdNullEmpty(pwd: String?): Boolean {
         return !pwd.isNullOrEmpty()
     }
 
@@ -243,7 +261,7 @@ class RegisterActivity : AppCompatActivity() {
      * @param pwd the password that read from register format
      * @return true if the password is between 8 -20, false if less than 8 or more than 20
      */
-    fun validatePwdLength(pwd: String): Boolean {
+    private fun validatePwdLength(pwd: String): Boolean {
         return pwd.length in 8..20
     }
 
@@ -253,7 +271,7 @@ class RegisterActivity : AppCompatActivity() {
      * @return true if the password is following the right format (match the format: has capital and lower letters at the same time, also with numbers and symbols)
      * false if any of the requirements are missing
      */
-    fun validatePwdFormat(pwd: String): Boolean {
+    private fun validatePwdFormat(pwd: String): Boolean {
         return pwd.matches(".*[A-Z].*".toRegex()) &&
                 pwd.matches(".*[a-z].*".toRegex()) &&
                 pwd.matches(".*[0-9].*".toRegex())
@@ -264,7 +282,7 @@ class RegisterActivity : AppCompatActivity() {
      * @param email the email that read from register format
      * @return true if the email fits the format that has a @ symbol in string and a dot symbol at last
      */
-    fun validateEmail(email: String): Boolean {
+    private fun validateEmail(email: String): Boolean {
         val emailRegex = "^([a-zA-Z0-9]*[-_]?[.]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$"
         return email.matches(emailRegex.toRegex())
     }
@@ -274,7 +292,7 @@ class RegisterActivity : AppCompatActivity() {
      * @param email the email that read from register format
      * @return true if the email is not null, false if the email is null
      */
-    fun validateEmailNullEmpty(email: String?): Boolean {
+    private fun validateEmailNullEmpty(email: String?): Boolean {
         return !email.isNullOrEmpty()
     }
 

@@ -1,5 +1,8 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.question
 
+/**
+ * Data class for question
+ */
 data class Question (
     val id: Int,
     val question: String,
