@@ -55,6 +55,10 @@
     <string name="next_question">Next Question</string>
     <string name="wrong_empty">No wrong questions</string>
 
+    // Map page
+    <string name="back_home">Back to Home</string>
+
+
 
     <string name="back" />
     <string name="restart" />
