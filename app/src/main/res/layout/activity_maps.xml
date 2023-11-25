@@ -18,8 +18,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:background="#2196F3"
-        android:backgroundTint="#009688"
-        android:text="Back to Home" />
+        android:backgroundTint="#4B6DD9"
+        android:text="@string/back_home" />
 
 </RelativeLayout>

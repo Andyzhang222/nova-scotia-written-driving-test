@@ -55,6 +55,9 @@
     <string name="ai_ask_question">对于考试有任何问题，有AI帮助你，请输入你的问题？</string>
     <string name="ai_write_here">请在这里输入 </string>
 
+    // Map page
+    <string name="back_home">返回主页</string>
+
 
     <string name="back">返回</string>
     <string name="restart">重启</string>
