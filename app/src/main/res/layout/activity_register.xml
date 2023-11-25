@@ -26,12 +26,11 @@
         android:layout_width="379dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="331dp"
+        android:layout_marginTop="24dp"
         app:helperTextTextColor="#FF0000"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_welcome_text">
+        app:layout_constraintTop_toBottomOf="@+id/register_background">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
@@ -47,12 +46,11 @@
         android:layout_width="379dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
         app:helperTextTextColor="#FF0000"
-        app:layout_constraintBottom_toTopOf="@+id/confirmPasswordLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_background"
+        app:layout_constraintTop_toBottomOf="@+id/emailLayout"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -70,10 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="30dp"
         app:helperTextTextColor="#FF0000"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
@@ -92,10 +89,9 @@
         android:id="@+id/toLoginTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="34dp"
+        android:layout_marginTop="25dp"
         android:text="@string/to_login_text"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerButton" />
@@ -104,26 +100,24 @@
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="51dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="#4D6BD9"
         android:minWidth="200dp"
         android:text="@string/register_button"
         android:textColor="#ECE7E7"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/toLoginTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordLayout" />
 
     <ImageView
         android:id="@+id/register_background"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="105dp"
-        android:background="@drawable/register_background"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/login_background"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/passwordLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -131,15 +125,14 @@
         android:id="@+id/register_welcome_text"
         android:layout_width="187dp"
         android:layout_height="0dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginBottom="211dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="60dp"
         android:text="Welcome, \nRegister For New!"
         android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/emailLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/languageButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
