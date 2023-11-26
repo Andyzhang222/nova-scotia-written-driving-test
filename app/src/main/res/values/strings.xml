@@ -1,3 +1,72 @@
 <resources>
     <string name="app_name">Nova Scotia Written Driving Test</string>
+    <string name="language_button">Chinese</string>
+
+    // Registry page
+    <string name="enter_your_email">Enter your Email</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="login">Login</string>
+    <string name="not_registered_yet_sign_up">Not Registered Yet ? Sign Up!</string>
+
+    <string name="email_hint">Enter your Email</string>
+    <string name="password_hint">Type Your Password</string>
+    <string name="confirm_password_hint">Retype Your Password</string>
+    <string name="register_button">Register Now!</string>
+    <string name="to_login_text">Already Registered, Sign In!</string>
+
+    <string name="registration_successful">Registration Successful</string>
+    <string name="go_to_login">Go to Login</string>
+    <string name="ok">OK</string>
+
+    <string name="fill_all_fields">Please fill in all the fields</string>
+    <string name="enter_email">Please enter your email</string>
+    <string name="enter_password">Please enter your password</string>
+    <string name="authentication_failed">Authentication failed</string>
+
+    // Login page
+    <string name="error_email_password_empty">Email or password cannot be empty</string>
+    <string name="login_success">Login successfully</string>
+    <string name="login_failed">Login failed</string>
+
+    <string name="alert_ok">OK</string>
+    <string name="login_success_message">Login successfully</string>
+
+    // Main activity page
+    <string name="main_slogan">To be a safe driver!</string>
+    <string name="ai_assistant">AI Assistant</string>
+    <string name="practice_test">Practice Test</string>
+    <string name="review">Review</string>
+    <string name="test_location">Test Location</string>
+
+    // AI assistant page
+    <string name="welcome_text">Welcome</string>
+    <string name="send_button">Send</string>
+    <string name="typing">Typing...</string>
+    <string name="no_response">No response available</string>
+    <string name="api_call_unsuccessful">API call unsuccessful:</string>
+    <string name="failed_to_load_response">Failed to load response due to</string>
+    <string name="ai_ask_question">Any question about driving test? Ask here!</string>
+    <string name="ai_write_here">Write here </string>
+
+
+    // test
+    <string name="finish_quiz">Finish Quiz</string>
+    <string name="answer">Answer</string>
+    <string name="next_question">Next Question</string>
+    <string name="wrong_empty">No wrong questions</string>
+
+    // Map page
+    <string name="back_home">Back to Home</string>
+
+
+
+    <string name="back" />
+    <string name="restart" />
+    <string name="log_out">Log Out</string>
+
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Chinese</item>
+    </string-array>
 </resources>
+
