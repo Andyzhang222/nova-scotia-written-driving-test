@@ -69,6 +69,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     testImplementation("org.mockito:mockito-core:3.11.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
     testImplementation("com.squareup.retrofit2:retrofit:2.9.0")
     testImplementation("com.squareup.retrofit2:converter-gson:2.9.0")

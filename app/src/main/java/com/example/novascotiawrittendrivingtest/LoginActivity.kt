@@ -17,6 +17,7 @@ import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
+    lateinit var authenticator: Authenticator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,9 @@ class LoginActivity : AppCompatActivity() {
 
         // Initialize Firebase Auth
         auth = Firebase.auth
+
+        // Initialize Authenticator
+        authenticator = FirebaseAuthenticator(auth)
 
         // Initialize language change button
         val languageButton: Button = findViewById(R.id.languageButton)
@@ -53,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
             val email = emailEt.text.toString()
             val password = passwordEt.text.toString()
 
-            // Sign in with email and password
             signInWithEmail(email, password)
         }
 
@@ -67,6 +70,32 @@ class LoginActivity : AppCompatActivity() {
 
         guestText.setOnClickListener {
             signInAnonymously()
+        }
+    }
+
+    private fun signInAnonymously() {
+        authenticator.authenticateAnonymously { isSuccess, exception ->
+            if (isSuccess) {
+                Log.d(TAG, "signInAnonymously:success")
+                navigateToMainActivity()
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "signInAnonymously:failure", exception)
+                // Handle errors here
+                showAlert(R.string.login_failed)
+            }
+        }
+    }
+
+    fun signInWithEmail(email: String, password: String) {
+
+        authenticator.authenticateWithEmail(email, password) { isSuccess, exception ->
+            if (isSuccess) {
+                navigateToMainActivity()
+            } else {
+                Log.w(TAG, "signInWithEmail:failure", exception)
+                showAlert(R.string.login_failed)
+            }
         }
     }
 
@@ -130,42 +159,42 @@ class LoginActivity : AppCompatActivity() {
         languageButton.text = if (getUserSelectedLanguage() == "en") getString(R.string.language_button) else getString(R.string.language_button)
     }
 
-    /**
-     * Signs in the user with Firebase Authentication and handles success or failure
-     */
-    fun signInWithEmail(email: String, password: String) {
-        if (email.isBlank() || password.isBlank()) {
-            showAlert(R.string.error_email_password_empty)
-            return
-        }
+//    /**
+//     * Signs in the user with Firebase Authentication and handles success or failure
+//     */
+//    fun signInWithEmail(email: String, password: String) {
+//        if (email.isBlank() || password.isBlank()) {
+//            showAlert(R.string.error_email_password_empty)
+//            return
+//        }
+//
+//        auth.signInWithEmailAndPassword(email, password)
+//            .addOnCompleteListener(this) { task ->
+//                if (task.isSuccessful) {
+//                    Log.d(TAG, "signInWithEmail:success")
+//                    navigateToMainActivity()
+//                } else {
+//                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+//                    showAlert(R.string.login_failed)
+//                }
+//            }
+//    }
 
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "signInWithEmail:success")
-                    navigateToMainActivity()
-                } else {
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    showAlert(R.string.login_failed)
-                }
-            }
-    }
-
-    // Function to sign in as a guest
-    private fun signInAnonymously() {
-        auth.signInAnonymously()
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "signInAnonymously:success")
-                    navigateToMainActivity()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInAnonymously:failure", task.exception)
-                    // Handle errors here
-                    showAlert(R.string.login_failed)
-                }
-            }
-    }
+//    // Function to sign in as a guest
+//    private fun signInAnonymously() {
+//        auth.signInAnonymously()
+//            .addOnCompleteListener(this) { task ->
+//                if (task.isSuccessful) {
+//                    Log.d(TAG, "signInAnonymously:success")
+//                    navigateToMainActivity()
+//                } else {
+//                    // If sign in fails, display a message to the user.
+//                    Log.w(TAG, "signInAnonymously:failure", task.exception)
+//                    // Handle errors here
+//                    showAlert(R.string.login_failed)
+//                }
+//            }
+//    }
 
     /**
      * Displays an alert dialog with a message based on the result of the sign-in process

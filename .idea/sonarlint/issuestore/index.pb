@@ -57,5 +57,13 @@ Mapp/src/test/java/com/example/novascotiawrittendrivingtest/ExampleUnitTest.kt,
 Kapp/src/test/java/com/example/novascotiawrittendrivingtest/OpenAIAPITest.kt,1/6/167692a550b58878b046367f81641d4303a230b7
 ƒ
 Sapp/src/main/java/com/example/novascotiawrittendrivingtest/apiCall/ClientBuilder.kt,2/9/29eaada919b7cf21a526e8442c5869f301036176
+‚
+Rapp/src/test/java/com/example/novascotiawrittendrivingtest/RegisterActivityTest.kt,a/b/ab2b9b912e71eec08b6af4c46ccf882adfa120c5
+~
+Napp/src/main/java/com/example/novascotiawrittendrivingtest/ValidateRegister.kt,2/5/254422ff5469c42072c9f267b8fc70de85d10ded
 ƒ
-Sapp/src/test/java/com/example/novascotiawrittendrivingtest/LoginActivityUnitTest.kt,6/b/6b4c13b8c7abe321c90db9d4edddbf8a4f4240f4
+Sapp/src/main/java/com/example/novascotiawrittendrivingtest/FirebaseAuthenticator.kt,4/c/4c9d73e2af78ae02dccf87cfca427b453c805805
+{
+Kapp/src/main/java/com/example/novascotiawrittendrivingtest/Authenticator.kt,5/c/5ceed89d447df429c5ea822e242fad9f3c03f037
+‡
+Wapp/src/test/java/com/example/novascotiawrittendrivingtest/FirebaseAuthenticatorTest.kt,3/f/3f538563f468cc1cebf00f08a8928a0c2bed726b
