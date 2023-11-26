@@ -10,6 +10,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.novascotiawrittendrivingtest.helper.Authenticator
+import com.example.novascotiawrittendrivingtest.helper.FirebaseAuthenticator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -17,6 +19,7 @@ import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var authenticator: Authenticator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,9 @@ class LoginActivity : AppCompatActivity() {
 
         // Initialize Firebase Auth
         auth = Firebase.auth
+
+        // Initialize Authenticator
+        authenticator = FirebaseAuthenticator(auth)
 
         // Initialize language change button
         val languageButton: Button = findViewById(R.id.languageButton)
@@ -42,6 +48,8 @@ class LoginActivity : AppCompatActivity() {
         // Initialize register text
         val toRegisterText: TextView = findViewById(R.id.toRegisterText)
 
+        val guestText: TextView = findViewById(R.id.guestText)
+
         // Set login button listener
         loginButton.setOnClickListener {
             // Get email and password from EditText
@@ -51,8 +59,7 @@ class LoginActivity : AppCompatActivity() {
             val email = emailEt.text.toString()
             val password = passwordEt.text.toString()
 
-            // Sign in with email and password
-            signIn(email, password)
+            signInWithEmail(email, password)
         }
 
         // Set register text listener
@@ -61,6 +68,42 @@ class LoginActivity : AppCompatActivity() {
             val registerIntent = Intent(this, RegisterActivity::class.java)
             startActivity(registerIntent)
             finish()
+        }
+
+        guestText.setOnClickListener {
+            signInAnonymously()
+        }
+    }
+
+    /**
+     * Signs in the user anonymously and handles success or failure
+     */
+    private fun signInAnonymously() {
+        authenticator.authenticateAnonymously { isSuccess, exception ->
+            if (isSuccess) {
+                Log.d(TAG, "signInAnonymously:success")
+                navigateToMainActivity()
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "signInAnonymously:failure", exception)
+                // Handle errors here
+                showAlert(R.string.login_failed)
+            }
+        }
+    }
+
+    /**
+     * Signs in the user with Firebase Authentication and handles success or failure
+     */
+    private fun signInWithEmail(email: String, password: String) {
+
+        authenticator.authenticateWithEmail(email, password) { isSuccess, exception ->
+            if (isSuccess) {
+                navigateToMainActivity()
+            } else {
+                Log.w(TAG, "signInWithEmail:failure", exception)
+                showAlert(R.string.login_failed)
+            }
         }
     }
 
@@ -125,27 +168,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Signs in the user with Firebase Authentication and handles success or failure
-     */
-    private fun signIn(email: String, password: String) {
-        if (email.isBlank() || password.isBlank()) {
-            showAlert(R.string.error_email_password_empty)
-            return
-        }
-
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "signInWithEmail:success")
-                    showAlert(R.string.login_success)
-                } else {
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    showAlert(R.string.login_failed)
-                }
-            }
-    }
-
-    /**
      * Displays an alert dialog with a message based on the result of the sign-in process
      */
     private fun showAlert(messageResId: Int) {
@@ -154,9 +176,6 @@ class LoginActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 dialog.dismiss()
-                if (messageResId == R.string.login_success) {
-                    navigateToMainActivity()
-                }
             }
             .create().show()
     }

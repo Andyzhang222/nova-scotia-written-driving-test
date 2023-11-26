@@ -2,6 +2,7 @@
     <string name="app_name">Nova Scotia Written Driving Test</string>
     <string name="language_button">Chinese</string>
     <string name="welcome_message">Welcome,\nSign in For Continue!</string>
+    <string name="welcome_message_register">Welcome,\nRegister Now!</string>
     <string name="yes">Yes</string>
 
 
@@ -20,6 +21,7 @@
     <string name="registration_successful">Registration Successful</string>
     <string name="go_to_login">Go to Login</string>
     <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <string name="fill_all_fields">Please fill in all the fields</string>
     <string name="enter_email">Please enter your email</string>
@@ -40,6 +42,11 @@
     <string name="practice_test">Practice Test</string>
     <string name="review">Review</string>
     <string name="test_location">Test Location</string>
+    <string name="register_alert">"Only available for registered users, do you want to register now?"</string>
+    <string name="register_a_new_account">Register a new account</string>
+    <string name="select_language">Select Language</string>
+    <string name="anonymous_logout_title">Confirm Logout</string>
+    <string name="anonymous_logout_message">Logging out will delete your guest account and its data. Do you want to continue or register as a new user?</string>
 
     // AI assistant page
     <string name="welcome_text">Welcome</string>
@@ -70,6 +77,7 @@
     <string name="back" />
     <string name="restart" />
     <string name="log_out">Log Out</string>
+    <string name="continue_as_guest">Continue as Guest</string>
 
     <string-array name="language_options">
         <item>English</item>

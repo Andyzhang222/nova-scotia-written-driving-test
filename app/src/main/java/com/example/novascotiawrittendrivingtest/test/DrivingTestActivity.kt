@@ -215,25 +215,29 @@ class DrivingTestActivity : AppCompatActivity() {
 
             if (currentPosition == 39) {
                 // Create an AlertDialog builder
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle(getString(R.string.quiz_complete))
-                builder.setMessage(getString(R.string.quiz_complete_message))
-
-                // Add the buttons
-                builder.setPositiveButton(getString(R.string.yes)) { dialog, which ->
-                    // User clicked 'Yes' button. Reset the questions and restart the quiz.
-                    currentPosition = 0
-                    correctAnswer = 0
-                    initializeQuestion()
-                    updateUserInFirebase(userId, currentPosition)
-                }
-
-                // Create and show the AlertDialog
-                val dialog = builder.create()
-                dialog.show()
+                showResetAlert()
             }
 
         }
+    }
+
+    private fun showResetAlert() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.quiz_complete))
+        builder.setMessage(getString(R.string.quiz_complete_message))
+
+        // Add the buttons
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            // User clicked 'Yes' button. Reset the questions and restart the quiz.
+            currentPosition = 0
+            correctAnswer = 0
+            initializeQuestion()
+            updateUserInFirebase(userId, currentPosition)
+        }
+
+        // Create and show the AlertDialog
+        val dialog = builder.create()
+        dialog.show()
     }
 
     /**
@@ -261,13 +265,14 @@ class DrivingTestActivity : AppCompatActivity() {
     private fun evaluateSelectedOption() {
         // Get current question
         val question = questionsList[currentPosition]
+
         // If selected option is correct, increment correct answer count, else update the layout of wrong answer
-        if (question.correctAnswer != selectedPosition) {
+        correctness = if (question.correctAnswer != selectedPosition) {
             answerUpdate(selectedPosition, R.drawable.wrong_option_border_bg)
-            correctness = false
+            false
         } else {
             correctAnswer++
-            correctness = true
+            true
         }
 
         // Show correct answer

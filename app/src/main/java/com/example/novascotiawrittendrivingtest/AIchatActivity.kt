@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest.aiChat
+package com.example.novascotiawrittendrivingtest
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,13 +10,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.novascotiawrittendrivingtest.MainActivity
-import com.example.novascotiawrittendrivingtest.R
 import com.example.novascotiawrittendrivingtest.apiCall.ClientBuilder
 import com.example.novascotiawrittendrivingtest.apiCall.OpenAIInterface
 import com.example.novascotiawrittendrivingtest.dataClass.ChatRequest
 import com.example.novascotiawrittendrivingtest.dataClass.Message
 import com.example.novascotiawrittendrivingtest.dataClass.OpenAIResponse
+import com.example.novascotiawrittendrivingtest.helper.ChatAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

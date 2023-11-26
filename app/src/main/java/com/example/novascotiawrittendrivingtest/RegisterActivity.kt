@@ -1,14 +1,18 @@
 package com.example.novascotiawrittendrivingtest
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.example.novascotiawrittendrivingtest.helper.ValidateRegister
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -112,9 +116,9 @@ class RegisterActivity : AppCompatActivity() {
         emailEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val email = emailEditText.text.toString()
-                if (!validateEmailNullEmpty(email)) {
+                if (!ValidateRegister.validateEmailNullEmpty(email)) {
                     emailLayout.helperText = "Please enter your email"
-                } else if (!validateEmail(email)) {
+                } else if (!ValidateRegister.validateEmail(email)) {
                     emailLayout.helperText = "Invalid Email"
                 } else {
                     emailLayout.helperText = null
@@ -133,11 +137,11 @@ class RegisterActivity : AppCompatActivity() {
                 val password = passwordEditText.text.toString()
 
                 // Check if the password is valid
-                if (!validatePwdNullEmpty(password)) {
+                if (!ValidateRegister.validatePwdNullEmpty(password)) {
                     passwordLayout.helperText = "Please enter your password"
-                } else if (!validatePwdLength(password)) {
+                } else if (!ValidateRegister.validatePwdLength(password)) {
                     passwordLayout.helperText = "Password length should be between 8 and 20"
-                } else if (!validatePwdFormat(password)) {
+                } else if (!ValidateRegister.validatePwdFormat(password)) {
                     passwordLayout.helperText = "Password should contain at least one capital letter, lower case and number"
                 } else {
                     passwordLayout.helperText = null
@@ -157,7 +161,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 // Check if the password is valid
                 val rePassword = confirmPasswordEditText.text.toString()
-                if (!validatePwdNullEmpty(rePassword)) {
+                if (!ValidateRegister.validatePwdNullEmpty(rePassword)) {
                     confirmPasswordLayout.helperText = "Please enter your password"
                 } else if (password != rePassword) {
                     confirmPasswordLayout.helperText = "Passwords do not match for the previous one"
@@ -207,15 +211,31 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // Check if the passwords match
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    showAlert("registration_successful")
-                } else {
-                    showAlert(getString(R.string.authentication_failed, task.exception?.message))
+        // Check if the user is already signed in anonymously
+        val currentUser = auth.currentUser
+        if (currentUser != null && currentUser.isAnonymous) {
+            // User is signed in anonymously, link the new credentials
+            val credential = EmailAuthProvider.getCredential(email, password)
+            currentUser.linkWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Linking successful, continue with the post-registration process
+                        showAlert("registration_successful")
+                    } else {
+                        Log.w(TAG, "linkWithCredential:failure", task.exception)
+                    }
                 }
-            }
+        } else {
+            // User is not signed in or not anonymous, proceed with normal registration
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        showAlert("registration_successful")
+                    } else {
+                        Log.w(TAG, "linkWithCredential:failure", task.exception)
+                    }
+                }
+        }
     }
 
     /**
@@ -246,55 +266,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * These methods check if the register password is validated or not
-     * @param pwd the password that read from register format
-     * @return true if the password contains at least one capital letter, one lower case, one symbol,
-     *         and the length is less than 13 and more than 8
-     */
-    private fun validatePwdNullEmpty(pwd: String?): Boolean {
-        return !pwd.isNullOrEmpty()
-    }
-
-    /**
-     * This method checks if the register password has the right length
-     * @param pwd the password that read from register format
-     * @return true if the password is between 8 -20, false if less than 8 or more than 20
-     */
-    private fun validatePwdLength(pwd: String): Boolean {
-        return pwd.length in 8..20
-    }
-
-    /**
-     * This method checks if the register password's format
-     * @param pwd the password that read from register format
-     * @return true if the password is following the right format (match the format: has capital and lower letters at the same time, also with numbers and symbols)
-     * false if any of the requirements are missing
-     */
-    private fun validatePwdFormat(pwd: String): Boolean {
-        return pwd.matches(".*[A-Z].*".toRegex()) &&
-                pwd.matches(".*[a-z].*".toRegex()) &&
-                pwd.matches(".*[0-9].*".toRegex())
-    }
-
-    /**
-     * This method checks the register email's format
-     * @param email the email that read from register format
-     * @return true if the email fits the format that has a @ symbol in string and a dot symbol at last
-     */
-    private fun validateEmail(email: String): Boolean {
-        val emailRegex = "^([a-zA-Z0-9]*[-_]?[.]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$"
-        return email.matches(emailRegex.toRegex())
-    }
-
-    /**
-     * This method checks if the register email's format is right or not
-     * @param email the email that read from register format
-     * @return true if the email is not null, false if the email is null
-     */
-    private fun validateEmailNullEmpty(email: String?): Boolean {
-        return !email.isNullOrEmpty()
-    }
 
     /**
      * Constants for shared preferences keys

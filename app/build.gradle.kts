@@ -57,14 +57,23 @@ dependencies {
     // Map and Location
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
 
     // Jun Gao add for retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0")
+
+    // Test dependencies
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.mockito:mockito-core:3.11.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
+    testImplementation("com.squareup.retrofit2:retrofit:2.9.0")
+    testImplementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    testImplementation("org.robolectric:robolectric:4.10.3")
 
 
 }

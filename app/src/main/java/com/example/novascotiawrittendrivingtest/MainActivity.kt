@@ -24,7 +24,7 @@ import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import com.example.novascotiawrittendrivingtest.aiChat.AIchatActivity
+import androidx.appcompat.app.AlertDialog
 import com.example.novascotiawrittendrivingtest.dataClass.User
 import com.example.novascotiawrittendrivingtest.test.DrivingTestActivity
 import com.example.novascotiawrittendrivingtest.test.EmptyWrongActivity
@@ -47,30 +47,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Set language
-        val sharedPref = getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
-        val language = sharedPref.getString("SelectedLanguage", Locale.getDefault().language)
-        val locale = Locale(language)
-        Locale.setDefault(locale)
-        val config = resources.configuration
-        config.setLocale(locale)
-        resources.updateConfiguration(config, resources.displayMetrics)
+        setLanguage()
 
         // Set content view
         setContentView(R.layout.activity_main)
-
-        // Initialize Firebase Auth to check if user is logged in
-        val user = Firebase.auth.currentUser
-
-        // If user is not logged in, navigate to login activity, else get user id
-        if (user == null) {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        } else{
-            user.let {
-                userId = it.uid
-            }
-        }
 
         // Get the navigation
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
@@ -81,11 +61,25 @@ class MainActivity : AppCompatActivity() {
         // Get the progress bar
         progressText = findViewById(R.id.progressText)
 
+        // Initialize Firebase Auth to check if user is logged in
+        val user = Firebase.auth.currentUser
+
+        // If user is not logged in, navigate to login activity, else get user id
+        if (user == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            user.let {
+                userId = it.uid
+            }
+        }
+
         // Initialize toolbar
         initialToolBar()
 
         // Set navigation listeners
-        setNavigationListener()
+        setNavigationListener(user)
 
         // Set question
         database = Firebase.database.reference
@@ -128,25 +122,59 @@ class MainActivity : AppCompatActivity() {
         notificationManager.scheduleNotification()
     }
 
+//    private fun setLanguage() {
+//        val sharedPref = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE)
+//        val language = sharedPref.getString("SelectedLanguage", Locale.getDefault().language)
+//        val locale = Locale(language)
+//        Locale.setDefault(locale)
+//        val config = resources.configuration
+//        config.setLocale(locale)
+//        resources.updateConfiguration(config, resources.displayMetrics)
+//    }
+
+    private fun setLanguage(languageCode: String? = null) {
+        val sharedPref = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE)
+        val currentLanguage = languageCode ?: sharedPref.getString("SelectedLanguage", Locale.getDefault().language)
+
+        val locale = Locale(currentLanguage)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        // Save the new language preference if it's provided
+        if (languageCode != null) {
+            with(sharedPref.edit()) {
+                putString("SelectedLanguage", languageCode)
+                apply()
+            }
+        }
+    }
+
     /**
      * Set the language to the opposite of the current language
      */
-    private fun setNavigationListener() {
-        aiAssistantContainer.setOnClickListener() {
-            // Navigate to practice test activity
-            val practiceTestIntent = Intent(this, AIchatActivity::class.java)
-            startActivity(practiceTestIntent)
-            finish()
+    private fun setNavigationListener(user : com.google.firebase.auth.FirebaseUser?) {
+
+        aiAssistantContainer.setOnClickListener {
+            if  (user!!.isAnonymous) {
+                showAlert(R.string.register_alert)
+            } else {
+                // Navigate to practice test activity
+                val practiceTestIntent = Intent(this, AIchatActivity::class.java)
+                startActivity(practiceTestIntent)
+                finish()
+            }
         }
 
-        practiceTestContainer.setOnClickListener() {
+        practiceTestContainer.setOnClickListener {
             // Navigate to practice test activity
             val practiceTestIntent = Intent(this, DrivingTestActivity::class.java)
             startActivity(practiceTestIntent)
             finish()
         }
 
-        testLocation.setOnClickListener() {
+        testLocation.setOnClickListener {
             // Navigate to question review activity
             val testLocation = Intent(this, MapActivity::class.java)
             startActivity(testLocation)
@@ -156,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
     // Will be completed once question part is done
     private fun progress() {
-        progressBar = findViewById<ProgressBar>(R.id.user_progress_bar)
+        progressBar = findViewById(R.id.user_progress_bar)
 
         var currentPosition = 0
 
@@ -191,7 +219,7 @@ class MainActivity : AppCompatActivity() {
     {
         navToolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(navToolbar)
-        supportActionBar?.setTitle("")
+        supportActionBar?.title = ""
     }
 
     /**
@@ -200,18 +228,30 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         when (item.itemId) {
+            R.id.action_register -> {
+                // Handle login
+                val intent = Intent(this, RegisterActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.action_select_language -> {
+                showLanguageSelectionDialog()
+            }
             R.id.action_log_out -> {
 
-                Firebase.auth.signOut()
-
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-                return true
+                val user = Firebase.auth.currentUser
+                if (user != null && user.isAnonymous) {
+                    showAnonymousLogoutAlert()
+                } else {
+                    // Regular logout for non-anonymous users
+                    performLogout()
+                }
             }
             else -> return super.onOptionsItemSelected(item)
         }
+        return true
     }
+
 
     /**
      * Creates the menu for the toolbar
@@ -234,6 +274,77 @@ class MainActivity : AppCompatActivity() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    /**
+     * Log out the user
+     */
+    private fun performLogout() {
+        Firebase.auth.signOut()
+        // Redirect to login or other appropriate activity
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    /**
+     * Show alert dialog
+     */
+    private fun showAlert(messageResId: Int) {
+        val message = getString(messageResId)
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+                val register = Intent(this, RegisterActivity::class.java)
+                startActivity(register)
+                finish()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create().show()
+    }
+
+    /**
+     * Show language selection dialog
+     */
+    private fun showLanguageSelectionDialog() {
+        val languages = resources.getStringArray(R.array.language_options)
+        val languageCodes = arrayOf("en", "zh")
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.select_language))
+            .setItems(languages) { _, which ->
+                setLanguage(languageCodes[which])
+                recreate() // Recreate the activity to apply the new language
+            }
+            .create()
+            .show()
+    }
+
+    /**
+     * Show alert dialog for anonymous user logout
+     */
+    private fun showAnonymousLogoutAlert() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.anonymous_logout_title))
+            .setMessage(getString(R.string.anonymous_logout_message))
+            .setPositiveButton(getString(R.string.log_out)) { dialog, _ ->
+                performLogout()
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.register_a_new_account)) { dialog, _ ->
+                // Redirect to a registration or account linking activity
+                val registerIntent = Intent(this, RegisterActivity::class.java)
+                startActivity(registerIntent)
+                dialog.dismiss()
+            }
+            .setNeutralButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(true)
+            .show()
     }
 
 }
