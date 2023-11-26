@@ -223,6 +223,7 @@ class RegisterActivity : AppCompatActivity() {
                     } else {
                         //TODO: Handle error
                         Log.w(TAG, "linkWithCredential:failure", task.exception)
+//                        showAlert(getString(R.string.authentication_failed, task.exception?.message))
                     }
                 }
         } else {
@@ -234,6 +235,7 @@ class RegisterActivity : AppCompatActivity() {
                     } else {
                         //TODO: Handle error
                         Log.w(TAG, "linkWithCredential:failure", task.exception)
+//                        showAlert(getString(R.string.authentication_failed, task.exception?.message))
                     }
                 }
         }
