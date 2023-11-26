@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">新斯科舍省书面驾驶考试</string>
     <string name="language_button">英文</string>
+    <string name="welcome_message">欢迎，\n继续请登录！</string>
+    <string name="yes">确定</string>
 
     // registry page
     <string name="enter_your_email">输入您的电子邮件</string>

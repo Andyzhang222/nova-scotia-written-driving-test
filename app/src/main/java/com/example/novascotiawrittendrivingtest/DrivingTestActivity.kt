@@ -217,7 +217,7 @@ class DrivingTestActivity : AppCompatActivity() {
                 builder.setMessage(getString(R.string.quiz_complete_message))
 
                 // Add the buttons
-                builder.setPositiveButton("Yes") { dialog, which ->
+                builder.setPositiveButton(getString(R.string.yes)) { dialog, which ->
                     // User clicked 'Yes' button. Reset the questions and restart the quiz.
                     currentPosition = 0
                     correctAnswer = 0
@@ -353,25 +353,6 @@ class DrivingTestActivity : AppCompatActivity() {
         })
     }
 
-    // To get the wrong question list, please use:
-//    private fun fetchIncorrectQuestionIds(userId: String) {
-//        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
-//
-//        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                if (snapshot.exists()) {
-                      // incorrectQuestionIds is the string list with wrong question ids
-//                    val incorrectQuestionIds = snapshot.children.mapNotNull { it.key }
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e(TAG, "Database error: $databaseError")
-//            }
-//        })
-//    }
-
-    //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
         // Add other extras as needed
