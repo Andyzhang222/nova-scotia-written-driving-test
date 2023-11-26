@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10">
+        app:layout_constraintTop_toBottomOf="@+id/registerBackgroun">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEdit"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/registerBackgroun"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/register_background"
@@ -85,7 +85,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/loginWelcomeText"
         android:layout_width="220dp"
         android:layout_height="74dp"
         android:layout_marginStart="16dp"
@@ -94,7 +94,7 @@
         android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/imageView10"
+        app:layout_constraintStart_toStartOf="@+id/registerBackgroun"
         app:layout_constraintTop_toTopOf="parent" />
 
     <include layout="@layout/language_button_layout"/>

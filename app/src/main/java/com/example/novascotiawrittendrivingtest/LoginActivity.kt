@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEt.text.toString()
 
             // Sign in with email and password
-            signIn(email, password)
+            signInWithEmail(email, password)
         }
 
         // Set register text listener
@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Signs in the user with Firebase Authentication and handles success or failure
      */
-    private fun signIn(email: String, password: String) {
+    private fun signInWithEmail(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             showAlert(R.string.error_email_password_empty)
             return
@@ -141,6 +141,21 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     showAlert(R.string.login_failed)
+                }
+            }
+    }
+
+    // Function to sign in as a guest
+    fun signInAnonymously() {
+        auth.signInAnonymously()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "signInAnonymously:success")
+                    showAlert(R.string.login_success)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInAnonymously:failure", task.exception)
+                    // Handle errors here
                 }
             }
     }

@@ -65,3 +65,5 @@ Sapp/src/main/java/com/example/novascotiawrittendrivingtest/question/QuestionBan
 Vapp/src/main/java/com/example/novascotiawrittendrivingtest/question/QuestionBank_CN.kt,9/1/9144d907750f9b4b4eaa40a5220966ee3d73a6df
 …
 Uapp/src/main/java/com/example/novascotiawrittendrivingtest/apiCall/OpenAIInterface.kt,1/8/18f10f3d6b36c89f1734aa3f524479fabc11b6cb
+F
+app/proguard-rules.pro,9/e/9e08934d811afe28fbc77aaa3c0d747b94348db9
