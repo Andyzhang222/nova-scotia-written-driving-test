@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Nova Scotia Written Driving Test</string>
     <string name="language_button">Chinese</string>
+    <string name="welcome_message">Welcome,\nSign in For Continue!</string>
+    <string name="yes">Yes</string>
+
 
     // Registry page
     <string name="enter_your_email">Enter your Email</string>
@@ -21,7 +24,7 @@
     <string name="fill_all_fields">Please fill in all the fields</string>
     <string name="enter_email">Please enter your email</string>
     <string name="enter_password">Please enter your password</string>
-    <string name="authentication_failed">Authentication failed</string>
+    <string name="authentication_failed">Authentication failed: %1$s</string>
 
     // Login page
     <string name="error_email_password_empty">Email or password cannot be empty</string>
@@ -54,6 +57,10 @@
     <string name="answer">Answer</string>
     <string name="next_question">Next Question</string>
     <string name="wrong_empty">No wrong questions</string>
+    <string name="quiz_complete">Quiz Complete</string>
+    <string name="quiz_complete_message">You have completed the quiz. Do you want to start over?</string>
+
+
 
     // Map page
     <string name="back_home">Back to Home</string>

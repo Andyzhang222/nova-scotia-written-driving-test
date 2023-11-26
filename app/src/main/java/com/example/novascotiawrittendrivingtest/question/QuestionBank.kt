@@ -1,4 +1,7 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.question
+
+import com.example.novascotiawrittendrivingtest.R
+import com.example.novascotiawrittendrivingtest.dataClass.Question
 
 /*
     Object to store and manage a bank of questions for a driving test
@@ -12,7 +15,8 @@ object QuestionBank {
     init {
         // Add various questions to the question list, each with its own details
         // Each question includes an ID, question text, image resource, options, and the correct answer index
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             1,
             "What does this sign mean?",
             R.drawable.question1,
@@ -21,9 +25,11 @@ object QuestionBank {
             "There is a slight right curve ahead",
             "There is a slight left curve ahead",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             2,
             "What does this sign mean?",
             R.drawable.question2,
@@ -32,9 +38,11 @@ object QuestionBank {
             "Drivers must take the right turn",
             "Drivers must keep right of the traffic island",
             4
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             3,
             "What does this sign mean?",
             R.drawable.question3,
@@ -43,9 +51,11 @@ object QuestionBank {
             "Drivers cannot park their vehicles in this area",
             "This is a private parking area",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             4,
             "What does this sign mean?",
             R.drawable.question4,
@@ -54,9 +64,11 @@ object QuestionBank {
             "There is a dead-end ahead",
             "There is a construction zone ahead",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             5,
             "What does this sign mean?",
             R.drawable.question5,
@@ -65,10 +77,12 @@ object QuestionBank {
             "There is a speed limit in the area ahead when lights are not flashing",
             "There is a speed limit in the area ahead when lights are flashing",
             4
-        ))
+        )
+        )
 
         // Question 6
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             6,
             "What does this sign mean?",
             R.drawable.question6,
@@ -77,10 +91,12 @@ object QuestionBank {
             "Drivers must turn to the right at intersection",
             "Drivers must come to a complete stop",
             1
-        ))
+        )
+        )
 
         // Question 7
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             7,
             "What does this sign mean?",
             R.drawable.question7,
@@ -89,10 +105,12 @@ object QuestionBank {
             "There is a sharp left turn ahead",
             "There is a slight right turn ahead",
             2
-        ))
+        )
+        )
 
         // Question 8
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             8,
             "What does this sign mean?",
             R.drawable.question8,
@@ -101,10 +119,12 @@ object QuestionBank {
             "Drivers must not drive through the intersection",
             "The road is turning ahead",
             3
-        ))
+        )
+        )
 
         // Question 9
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             9,
             "What does this sign mean?",
             R.drawable.question9,
@@ -113,9 +133,11 @@ object QuestionBank {
             "Drivers must not enter in the intersection",
             "Drivers must not drive their vehicle on the left lane",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             10,
             "What does this sign mean?",
             R.drawable.question10,
@@ -124,9 +146,11 @@ object QuestionBank {
             "Ending of a Speed limit zone",
             "There is a speed limit for longer vehicles usually 40m in length",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             11,
             "What does this sign mean?",
             R.drawable.question11,
@@ -135,9 +159,11 @@ object QuestionBank {
             "Snowmobile may use this road",
             "Snowmobile training institute ahead",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             12,
             "What does this sign mean?",
             R.drawable.question12,
@@ -146,9 +172,11 @@ object QuestionBank {
             "Drivers must keep on left lane",
             "There is an intersection ahead",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             13,
             "What does this sign mean?",
             R.drawable.question13,
@@ -157,9 +185,11 @@ object QuestionBank {
             "Ongoing Construction in the area between these signs",
             "Drivers must not speed-up in the area between these signs",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             14,
             "What does this sign mean?",
             R.drawable.question14,
@@ -168,9 +198,11 @@ object QuestionBank {
             "Drivers must keep on left lane",
             "There is an intersection ahead",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             15,
             "What does this sign mean?",
             R.drawable.question15,
@@ -179,9 +211,11 @@ object QuestionBank {
             "There is a bridge ahead",
             "The pavement narrows ahead",
             4
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             16,
             "What does this sign mean?",
             R.drawable.question16,
@@ -190,9 +224,11 @@ object QuestionBank {
             "Drivers must slow down their vehicle when signals are flashing",
             "Drivers must speed up their vehicles when signals are flashing",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             17,
             "What does this sign mean?",
             R.drawable.question17,
@@ -201,9 +237,11 @@ object QuestionBank {
             "Slower traffic must keep on right side",
             "All traffic must keep on the right lane",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             18,
             "What does this sign mean?",
             R.drawable.question18,
@@ -212,9 +250,11 @@ object QuestionBank {
             "The Cyclist must keep on Left lane",
             "The Motorcar drivers can drive recklessly",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             19,
             "What does this sign mean?",
             R.drawable.question19,
@@ -223,9 +263,11 @@ object QuestionBank {
             "Roundabout ahead, Drivers must travel in counter-clockwise direction",
             "There is a Construction zone ahead",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             20,
             "What does this sign mean?",
             R.drawable.question20,
@@ -234,9 +276,11 @@ object QuestionBank {
             "The Paved surface starts ahead",
             "The Paved surface ends ahead",
             4
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             21,
             "What does this sign mean?",
             R.drawable.question21,
@@ -245,9 +289,11 @@ object QuestionBank {
             "There is an intersection ahead",
             "There is a railway track ahead",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             22,
             "What does this sign mean?",
             R.drawable.question22,
@@ -256,9 +302,11 @@ object QuestionBank {
             "The Parking area",
             "There is a speed-breaker ahead",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             23,
             "What does this sign mean?",
             R.drawable.question23,
@@ -267,9 +315,11 @@ object QuestionBank {
             "Ambulance parking area",
             "Parking prohibited for disabled persons",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             24,
             "What does this sign mean?",
             R.drawable.question24,
@@ -278,9 +328,11 @@ object QuestionBank {
             "Drivers must come to a complete stop",
             "Drivers can’t park in this area",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             25,
             "What does this sign mean?",
             R.drawable.question25,
@@ -289,9 +341,11 @@ object QuestionBank {
             "Intersection ahead, Drivers must turn left or right",
             "Intersection ahead, Drivers from the mentioned lane must yield the right-of-way to the other drivers",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             26,
             "What does this sign mean?",
             R.drawable.question26,
@@ -300,9 +354,11 @@ object QuestionBank {
             "The road ahead is slippery when wet",
             "There is High Occupancy Lanes ahead",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             27,
             "What does this sign mean?",
             R.drawable.question27,
@@ -311,9 +367,11 @@ object QuestionBank {
             "There is a separation of road ahead",
             "Two roads going in the same direction merging ahead",
             4
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             28,
             "What does this sign mean?",
             R.drawable.question28,
@@ -322,9 +380,11 @@ object QuestionBank {
             "Drivers can park their vehicles in the area between these signs",
             "Bicycles can only park in the area between these signs, not four wheel vehicles",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             29,
             "What does this sign mean?",
             R.drawable.question29,
@@ -333,9 +393,11 @@ object QuestionBank {
             "The Speed limit in the area ahead",
             "None of the above",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             30,
             "What does this sign mean?",
             R.drawable.question30,
@@ -344,9 +406,11 @@ object QuestionBank {
             "Warning for Hospital-region ahead: Drive with caution and lookout for Patients",
             "Warning for Pedestrian-Crossing ahead: Drive with caution and lookout for pedestrians",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             31,
             "What does this sign mean?",
             R.drawable.question31,
@@ -355,9 +419,11 @@ object QuestionBank {
             "Do not take U-Turn ahead",
             "Drivers must take left turn ahead",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             32,
             "What does this sign mean?",
             R.drawable.question32,
@@ -366,9 +432,11 @@ object QuestionBank {
             "There is a bicycle crossing ahead",
             "This road contain an official bicycle-lane",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             33,
             "What does this sign mean?",
             R.drawable.question33,
@@ -377,9 +445,11 @@ object QuestionBank {
             "Drivers can go straight when facing a red light at intersection",
             "Drivers must come to a complete stop when facing red light at intersection",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             34,
             "What does this sign mean?",
             R.drawable.question34,
@@ -388,9 +458,11 @@ object QuestionBank {
             "The Parking area for large vehicles",
             "The beginning of Paved road",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             35,
             "What does this sign mean?",
             R.drawable.question35,
@@ -399,9 +471,11 @@ object QuestionBank {
             "There is a coastal area ahead",
             "There is a crosswalk ahead",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             36,
             "What does this sign mean?",
             R.drawable.question36,
@@ -410,9 +484,11 @@ object QuestionBank {
             "Drivers must not take left turn during the time mentioned",
             "Drivers must not take left turn other than the time mentioned",
             3
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             37,
             "What does this sign mean?",
             R.drawable.question37,
@@ -421,9 +497,11 @@ object QuestionBank {
             "There is a single-lane road ahead",
             "There is a two-lane road ahead",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             38,
             "What does this sign mean?",
             R.drawable.question38,
@@ -432,9 +510,11 @@ object QuestionBank {
             "There is Hospital zone ahead: Special risk of patients in the area",
             "There is police station ahead: Specials risk of pedestrians in the area",
             1
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             39,
             "What does this sign mean?",
             R.drawable.question39,
@@ -443,9 +523,11 @@ object QuestionBank {
             "Drivers can speed-up in the area between these signs because of no pedestrian",
             "Pedestrians are not allowed in the area between these signs",
             2
-        ))
+        )
+        )
 
-        questionsList.add(Question(
+        questionsList.add(
+            Question(
             40,
             "What does this sign mean?",
             R.drawable.question40,
@@ -454,7 +536,8 @@ object QuestionBank {
             "There is a slight right curve ahead",
             "There is a slight left curve ahead",
             3
-        ))
+        )
+        )
     }
 
     /**

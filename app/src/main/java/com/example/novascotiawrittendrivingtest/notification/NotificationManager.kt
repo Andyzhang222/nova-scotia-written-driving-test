@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.notification
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -18,8 +18,8 @@ class NotificationManager(private val context: Context) {
             PendingIntent.FLAG_IMMUTABLE)
 
         // Set the notification time frame
-        // val intervalMillis = 24 * 60 * 60 * 1000 // every day
-        val intervalMillis = 60_000 // temporarily set to every minute
+         val intervalMillis = 24 * 60 * 60 * 1000 // every day
+//        val intervalMillis = 60_000 // temporarily set to every minute
         val triggerAtMillis = System.currentTimeMillis() + intervalMillis
 
         // Set a repeating alarm that triggers the NotificationReceiver at the defined intervals

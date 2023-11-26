@@ -1,5 +1,8 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.dataClass
 
+/**
+ * User data class for storing user information
+ */
 data class User(
     val userId: String? = null,
     val currentQuestionPosition: Int = 0,

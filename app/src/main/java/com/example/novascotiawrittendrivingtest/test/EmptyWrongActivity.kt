@@ -1,10 +1,12 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.test
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import com.example.novascotiawrittendrivingtest.MainActivity
+import com.example.novascotiawrittendrivingtest.R
 import java.util.Locale
 
 class EmptyWrongActivity : AppCompatActivity() {
@@ -26,15 +28,14 @@ class EmptyWrongActivity : AppCompatActivity() {
         backButton.setOnClickListener { navigateToMain() }
     }
 
-    fun getUserSelectedLanguage(): String {
+    private fun getUserSelectedLanguage(): String {
         val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
         return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
     }
 
-    //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
-        // Add other extras as needed
         startActivity(intent)
+        finish()
     }
 }

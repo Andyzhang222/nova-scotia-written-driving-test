@@ -24,6 +24,11 @@ import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import com.example.novascotiawrittendrivingtest.aiChat.AIchatActivity
+import com.example.novascotiawrittendrivingtest.dataClass.User
+import com.example.novascotiawrittendrivingtest.test.DrivingTestActivity
+import com.example.novascotiawrittendrivingtest.test.EmptyWrongActivity
+import com.example.novascotiawrittendrivingtest.test.WrongQuestionReviewActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,11 +41,12 @@ class MainActivity : AppCompatActivity() {
     private var questionCount = 0
     private lateinit var navToolbar: Toolbar
     private lateinit var database: DatabaseReference
-    private lateinit var userId: String
+    private var userId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Set language
         val sharedPref = getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
         val language = sharedPref.getString("SelectedLanguage", Locale.getDefault().language)
         val locale = Locale(language)
@@ -49,57 +55,103 @@ class MainActivity : AppCompatActivity() {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
 
+        // Set content view
         setContentView(R.layout.activity_main)
 
+        // Initialize Firebase Auth to check if user is logged in
         val user = Firebase.auth.currentUser
-        user?.let {
-            userId = it.uid
+
+        // If user is not logged in, navigate to login activity, else get user id
+        if (user == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else{
+            user.let {
+                userId = it.uid
+            }
         }
 
+        // Get the navigation
         practiceTestContainer = findViewById(R.id.practiceTestContainer)
         questionReviewContainer = findViewById(R.id.questionReviewContainer)
         aiAssistantContainer = findViewById(R.id.AI_assistant_container)
         testLocation=findViewById(R.id.testLocationContainer)
 
+        // Get the progress bar
         progressText = findViewById(R.id.progressText)
 
+        // Initialize toolbar
         initialToolBar()
 
-        aiAssistantContainer.setOnClickListener(){
-            // Navigate to practice test activity
-            val practiceTestIntent = Intent(this, AIchatActivity::class.java)
-            startActivity(practiceTestIntent)
-            finish()
-        }
-        practiceTestContainer.setOnClickListener(){
-            // Navigate to practice test activity
-            val practiceTestIntent = Intent(this, DrivingTestActivity::class.java)
-            startActivity(practiceTestIntent)
-            finish()
-        }
+        // Set navigation listeners
+        setNavigationListener()
 
-        questionReviewContainer.setOnClickListener(){
-            // Navigate to question review activity
-            val questionReviewIntent = Intent(this, WrongQuestionReviewActivity::class.java)
-            startActivity(questionReviewIntent)
-            finish()
-        }
+        // Set question
+        database = Firebase.database.reference
+        val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
+        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    // Data exists
+                    questionReviewContainer.setOnClickListener {
+                        // Navigate to question review activity
+                        val questionReviewIntent = Intent(this@MainActivity, WrongQuestionReviewActivity::class.java)
+                        startActivity(questionReviewIntent)
+                        finish()
+                    }
+                } else {
+                    // Data is null or the path doesn't exist
+                    questionReviewContainer.setOnClickListener {
+                        // Navigate to question review activity
+                        val questionReviewIntent = Intent(this@MainActivity, EmptyWrongActivity::class.java)
+                        startActivity(questionReviewIntent)
+                        finish()
+                    }
+                }
+            }
 
-       testLocation.setOnClickListener(){
-            // Navigate to question review activity
-            val testLocation= Intent(this, MapActivity::class.java)
-            startActivity(testLocation)
-            finish()
-        }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Database error: $databaseError")
+            }
+        })
 
+        // Set progress bar
         progress()
 
         // Notification implementation
         createNotificationChannel()
 
         // Schedule notifications
-        val notificationManager = NotificationManager(this)
+        val notificationManager =
+            com.example.novascotiawrittendrivingtest.notification.NotificationManager(this)
         notificationManager.scheduleNotification()
+    }
+
+    /**
+     * Set the language to the opposite of the current language
+     */
+    private fun setNavigationListener() {
+        aiAssistantContainer.setOnClickListener() {
+            // Navigate to practice test activity
+            val practiceTestIntent = Intent(this, AIchatActivity::class.java)
+            startActivity(practiceTestIntent)
+            finish()
+        }
+
+        practiceTestContainer.setOnClickListener() {
+            // Navigate to practice test activity
+            val practiceTestIntent = Intent(this, DrivingTestActivity::class.java)
+            startActivity(practiceTestIntent)
+            finish()
+        }
+
+        testLocation.setOnClickListener() {
+            // Navigate to question review activity
+            val testLocation = Intent(this, MapActivity::class.java)
+            startActivity(testLocation)
+            finish()
+        }
     }
 
     // Will be completed once question part is done
@@ -111,6 +163,7 @@ class MainActivity : AppCompatActivity() {
         // logic to set progress bar based on question count
         progressBar.progress = questionCount
 
+        // logic to set progress text based on question count
         database = Firebase.database.reference
         database.child("users").child(userId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -131,6 +184,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Initialize the toolbar
+     */
     private fun initialToolBar()
     {
         navToolbar = findViewById(R.id.main_toolbar)
@@ -138,6 +194,9 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setTitle("")
     }
 
+    /**
+     * Set the language to the opposite of the current language
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         when (item.itemId) {
@@ -154,12 +213,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Creates the menu for the toolbar
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
-    // Notification channel
+    /**
+     * Creates a notification channel for the app
+     */
     private fun createNotificationChannel() {
         val channelId = "default_channel"
         val channelName = "Default Channel"
@@ -171,4 +235,5 @@ class MainActivity : AppCompatActivity() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
 }

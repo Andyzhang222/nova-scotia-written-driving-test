@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.aiChat
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,11 +10,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.novascotiawrittendrivingtest.MainActivity
+import com.example.novascotiawrittendrivingtest.R
 import com.example.novascotiawrittendrivingtest.apiCall.ClientBuilder
 import com.example.novascotiawrittendrivingtest.apiCall.OpenAIInterface
-import com.example.novascotiawrittendrivingtest.apiCall.dataClass.ChatRequest
-import com.example.novascotiawrittendrivingtest.apiCall.dataClass.Message
-import com.example.novascotiawrittendrivingtest.apiCall.dataClass.OpenAIResponse
+import com.example.novascotiawrittendrivingtest.dataClass.ChatRequest
+import com.example.novascotiawrittendrivingtest.dataClass.Message
+import com.example.novascotiawrittendrivingtest.dataClass.OpenAIResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,21 +61,44 @@ class AIchatActivity : AppCompatActivity() {
         }
     }
 
-    // Add the message to the chat on the recycler view
+    /**
+     * Adds a new chat message to the list and notifies the RecyclerView that the data has changed.
+     *
+     * @param message The message to add to the chat
+     * @param sentBy The role of the sender of the message
+     */
     private fun addToChat(message: String, sentBy: String) {
         runOnUiThread {
+            // Add the message to the chat
             messageList.add(Message(sentBy, message))
+
+            // Notify the RecyclerView that the data has changed
             messageAdapter.notifyDataSetChanged()
+
+            // Scroll to the bottom of the chat
             recyclerView.smoothScrollToPosition(messageAdapter.itemCount)
         }
     }
 
     // Add the response to the chat
+
+    /**
+     * Adds the response from the API to the chat.
+     *
+     * @param response The response from the API
+     */
     private fun addResponse(response: String) {
+        // Remove the typing message
         messageList.removeAt(messageList.size - 1)
+        // Add the response to the chat
         addToChat(response, "assistant")
     }
 
+    /**
+     * Calls the OpenAI API to get a response to the user's question.
+     *
+     * @param question The user's question
+     */
     private fun callAPI(question: String) {
         // Add a message to show that the assistant is typing
         messageList.add(Message("assistant ", "Typing... "))
@@ -128,7 +153,10 @@ class AIchatActivity : AppCompatActivity() {
             })
     }
 
-    // Navigate to main activity
+    /**
+     * Navigates to the main activity.
+
+     */
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
         // Add other extras as needed
