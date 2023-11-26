@@ -111,12 +111,11 @@ class MainActivity : AppCompatActivity() {
                         startActivity(questionReviewIntent)
                         finish()
                     }
-
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors
+                Log.e(ContentValues.TAG, "Database error: $databaseError")
             }
         })
 

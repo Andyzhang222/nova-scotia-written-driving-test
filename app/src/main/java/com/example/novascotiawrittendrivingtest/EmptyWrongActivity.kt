@@ -26,15 +26,13 @@ class EmptyWrongActivity : AppCompatActivity() {
         backButton.setOnClickListener { navigateToMain() }
     }
 
-    fun getUserSelectedLanguage(): String {
+    private fun getUserSelectedLanguage(): String {
         val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
         return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
     }
 
-    //To do: Uncomment or implement this when needed
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
-        // Add other extras as needed
         startActivity(intent)
         finish()
     }

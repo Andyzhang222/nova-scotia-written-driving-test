@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Nova Scotia Written Driving Test</string>
     <string name="language_button">Chinese</string>
+    <string name="welcome_message">Welcome,\nSign in For Continue!</string>
+    <string name="yes">Yes</string>
+
 
     // Registry page
     <string name="enter_your_email">Enter your Email</string>
