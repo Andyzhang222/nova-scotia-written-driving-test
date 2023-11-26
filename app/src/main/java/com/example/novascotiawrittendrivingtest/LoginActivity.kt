@@ -16,7 +16,7 @@ import com.google.firebase.ktx.Firebase
 import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
+    lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Signs in the user with Firebase Authentication and handles success or failure
      */
-    private fun signInWithEmail(email: String, password: String) {
+    fun signInWithEmail(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             showAlert(R.string.error_email_password_empty)
             return
@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Displays an alert dialog with a message based on the result of the sign-in process
      */
-    private fun showAlert(messageResId: Int) {
+    fun showAlert(messageResId: Int) {
         val message = getString(messageResId)
         AlertDialog.Builder(this)
             .setMessage(message)
@@ -183,7 +183,7 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Navigates to the main activity after successful sign-in
      */
-    private fun navigateToMainActivity() {
+    fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
