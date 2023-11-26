@@ -42,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
         // Initialize register text
         val toRegisterText: TextView = findViewById(R.id.toRegisterText)
 
+        val guestText: TextView = findViewById(R.id.guestText)
+
         // Set login button listener
         loginButton.setOnClickListener {
             // Get email and password from EditText
@@ -61,6 +63,10 @@ class LoginActivity : AppCompatActivity() {
             val registerIntent = Intent(this, RegisterActivity::class.java)
             startActivity(registerIntent)
             finish()
+        }
+
+        guestText.setOnClickListener {
+            signInAnonymously()
         }
     }
 
@@ -137,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
-                    showAlert(R.string.login_success)
+                    navigateToMainActivity()
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     showAlert(R.string.login_failed)
@@ -146,16 +152,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // Function to sign in as a guest
-    fun signInAnonymously() {
+    private fun signInAnonymously() {
         auth.signInAnonymously()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInAnonymously:success")
-                    showAlert(R.string.login_success)
+                    navigateToMainActivity()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInAnonymously:failure", task.exception)
                     // Handle errors here
+                    showAlert(R.string.login_failed)
                 }
             }
     }
@@ -169,9 +176,6 @@ class LoginActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 dialog.dismiss()
-                if (messageResId == R.string.login_success) {
-                    navigateToMainActivity()
-                }
             }
             .create().show()
     }

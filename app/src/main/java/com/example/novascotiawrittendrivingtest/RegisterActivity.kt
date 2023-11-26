@@ -1,14 +1,17 @@
 package com.example.novascotiawrittendrivingtest
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -207,15 +210,33 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // Check if the passwords match
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    showAlert("registration_successful")
-                } else {
-                    showAlert(getString(R.string.authentication_failed, task.exception?.message))
+
+        val currentUser = auth.currentUser
+        if (currentUser != null && currentUser.isAnonymous) {
+            // User is signed in anonymously, link the new credentials
+            val credential = EmailAuthProvider.getCredential(email, password)
+            currentUser.linkWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Linking successful, continue with the post-registration process
+                        showAlert("registration_successful")
+                    } else {
+                        //TODO: Handle error
+                        Log.w(TAG, "linkWithCredential:failure", task.exception)
+                    }
                 }
-            }
+        } else {
+            // User is not signed in or not anonymous, proceed with normal registration
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        showAlert("registration_successful")
+                    } else {
+                        //TODO: Handle error
+                        Log.w(TAG, "linkWithCredential:failure", task.exception)
+                    }
+                }
+        }
     }
 
     /**

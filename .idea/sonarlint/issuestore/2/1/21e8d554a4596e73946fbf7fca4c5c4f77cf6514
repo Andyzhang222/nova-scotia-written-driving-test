@@ -1,4 +1,4 @@
 
->kotlin:S1128"Remove this unused import.(»ó‡—ÿÿÿÿÿ8™˜ÏÀ1
-Bkotlin:S18748"#Deprecated code should not be used.(±åÛ¤8š˜ÏÀ1
-hkotlin:S6510Ê"CMove "return" statements from all branches before "when" statement.(—‚õÃşÿÿÿÿ8œ˜ÏÀ1
+=kotlin:S125~"Remove this commented out code.(ÄÃÇ8øö¶áÀ1
+>kotlin:S1128"Remove this unused import.(»ó‡—ÿÿÿÿÿ8ÕÀºáÀ1
+Ckotlin:S1874"#Deprecated code should not be used.(±åÛ¤8ğÃ´áÀ1

@@ -2,6 +2,7 @@
     <string name="app_name">新斯科舍省书面驾驶考试</string>
     <string name="language_button">英文</string>
     <string name="welcome_message">欢迎，\n继续请登录！</string>
+    <string name="welcome_message_register">欢迎，\n现在注册！</string>
     <string name="yes">确定</string>
 
     // registry page
@@ -19,6 +20,7 @@
     <string name="registration_successful">注册成功</string>
     <string name="go_to_login">前往登录</string>
     <string name="ok">确定</string>
+    <string name="cancel">取消</string>
 
     <string name="fill_all_fields">请填写所有字段</string>
     <string name="enter_email">请输入您的邮箱</string>
@@ -48,6 +50,11 @@
     <string name="practice_test">练习</string>
     <string name="review">复习</string>
     <string name="test_location">考试地点</string>
+    <string name="register_alert">"只有注册用户可以使用该功能, 是否现在注册为用户?"</string>
+    <string name="register_a_new_account">注册一个新账号</string>
+    <string name="select_language">选择语言</string>
+    <string name="anonymous_logout_title">确认登出</string>
+    <string name="anonymous_logout_message">登出会删除你的访客账号和数据，是否继续登出或者注册一个为正式用户</string>
 
     // AI assistant page
     <string name="welcome_text">欢迎</string>
@@ -66,6 +73,7 @@
     <string name="back">返回</string>
     <string name="restart">重启</string>
     <string name="log_out">登出</string>
+    <string name="continue_as_guest">以访客继续</string>
     <string-array name="language_options">
         <item>英文</item>
         <item>中文</item>
