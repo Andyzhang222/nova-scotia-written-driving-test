@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.helper
 
 class ValidateRegister {
     companion object {

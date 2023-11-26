@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.example.novascotiawrittendrivingtest.helper.ValidateRegister
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -210,7 +211,7 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-
+        // Check if the user is already signed in anonymously
         val currentUser = auth.currentUser
         if (currentUser != null && currentUser.isAnonymous) {
             // User is signed in anonymously, link the new credentials
@@ -221,9 +222,7 @@ class RegisterActivity : AppCompatActivity() {
                         // Linking successful, continue with the post-registration process
                         showAlert("registration_successful")
                     } else {
-                        //TODO: Handle error
                         Log.w(TAG, "linkWithCredential:failure", task.exception)
-//                        showAlert(getString(R.string.authentication_failed, task.exception?.message))
                     }
                 }
         } else {
@@ -233,9 +232,7 @@ class RegisterActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         showAlert("registration_successful")
                     } else {
-                        //TODO: Handle error
                         Log.w(TAG, "linkWithCredential:failure", task.exception)
-//                        showAlert(getString(R.string.authentication_failed, task.exception?.message))
                     }
                 }
         }

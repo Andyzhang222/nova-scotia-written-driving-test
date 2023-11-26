@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.helper
 
 import com.google.firebase.auth.FirebaseAuth
 

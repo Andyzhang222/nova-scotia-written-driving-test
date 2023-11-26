@@ -21,7 +21,7 @@
             android:name=".test.EmptyWrongActivity"
             android:exported="false" />
         <activity
-            android:name=".aiChat.AIchatActivity"
+            android:name=".AIchatActivity"
             android:exported="false" />
 
         <meta-data

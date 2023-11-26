@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest.aiChat
+package com.example.novascotiawrittendrivingtest.helper
 
 import android.view.LayoutInflater
 import android.view.View

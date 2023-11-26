@@ -1,5 +1,4 @@
-import com.example.novascotiawrittendrivingtest.RegisterActivity
-import com.example.novascotiawrittendrivingtest.ValidateRegister
+import com.example.novascotiawrittendrivingtest.helper.ValidateRegister
 import org.junit.Test
 import org.junit.Assert.*
 

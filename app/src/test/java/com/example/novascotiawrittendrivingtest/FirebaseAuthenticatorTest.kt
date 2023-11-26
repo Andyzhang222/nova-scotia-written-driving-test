@@ -1,5 +1,6 @@
 package com.example.novascotiawrittendrivingtest
 
+import com.example.novascotiawrittendrivingtest.helper.FirebaseAuthenticator
 import org.junit.runner.RunWith
 import com.google.firebase.auth.FirebaseAuth
 import org.junit.Before

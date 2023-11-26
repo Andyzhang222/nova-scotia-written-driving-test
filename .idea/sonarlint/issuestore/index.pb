@@ -69,3 +69,13 @@ Kapp/src/main/java/com/example/novascotiawrittendrivingtest/Authenticator.kt,5/
 Wapp/src/test/java/com/example/novascotiawrittendrivingtest/FirebaseAuthenticatorTest.kt,3/f/3f538563f468cc1cebf00f08a8928a0c2bed726b
 }
 Mapp/src/test/java/com/example/novascotiawrittendrivingtest/MapActivityTest.kt,4/7/47cd95e5f8a69af28799444283bcc374961ab220
+‚
+Rapp/src/main/java/com/example/novascotiawrittendrivingtest/helper/Authenticator.kt,f/3/f3805788f7d5b46b7e5cdeb466fd1819b063fd2e
+Š
+Zapp/src/main/java/com/example/novascotiawrittendrivingtest/helper/FirebaseAuthenticator.kt,b/8/b84565639d4eb5f494ccb17e357cc17f806bef30
+€
+Papp/src/main/java/com/example/novascotiawrittendrivingtest/helper/ChatAdapter.kt,c/8/c8ff46861b5dbd9d6575036b149cc1cdd6266d4e
+…
+Uapp/src/main/java/com/example/novascotiawrittendrivingtest/helper/ValidateRegister.kt,0/d/0dc7d1d330bbdc62357776fbeea32b3b73469cb3
+|
+Lapp/src/main/java/com/example/novascotiawrittendrivingtest/AIchatActivity.kt,5/f/5f9809234dbfee45451cf30aaa0b694e8aa03fd2
