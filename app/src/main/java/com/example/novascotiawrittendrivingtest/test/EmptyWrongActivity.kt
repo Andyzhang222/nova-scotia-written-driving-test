@@ -1,10 +1,12 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.test
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import com.example.novascotiawrittendrivingtest.MainActivity
+import com.example.novascotiawrittendrivingtest.R
 import java.util.Locale
 
 class EmptyWrongActivity : AppCompatActivity() {

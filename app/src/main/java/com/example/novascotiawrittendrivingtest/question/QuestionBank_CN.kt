@@ -1,6 +1,7 @@
 package com.example.novascotiawrittendrivingtest.question
 
 import com.example.novascotiawrittendrivingtest.R
+import com.example.novascotiawrittendrivingtest.dataClass.Question
 
 /*
     Object to store and manage a bank of questions for a driving test in Chinese

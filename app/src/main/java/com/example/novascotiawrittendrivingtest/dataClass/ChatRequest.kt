@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest.apiCall.dataClass
+package com.example.novascotiawrittendrivingtest.dataClass
 
 /**
  * Data class for chat request

@@ -1,7 +1,7 @@
 package com.example.novascotiawrittendrivingtest.apiCall
 
-import com.example.novascotiawrittendrivingtest.apiCall.dataClass.ChatRequest
-import com.example.novascotiawrittendrivingtest.apiCall.dataClass.OpenAIResponse
+import com.example.novascotiawrittendrivingtest.dataClass.ChatRequest
+import com.example.novascotiawrittendrivingtest.dataClass.OpenAIResponse
 import retrofit2.http.POST
 import retrofit2.Call
 import retrofit2.http.Body

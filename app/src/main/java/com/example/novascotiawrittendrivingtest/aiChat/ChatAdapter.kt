@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.aiChat
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.novascotiawrittendrivingtest.apiCall.dataClass.Message
+import com.example.novascotiawrittendrivingtest.R
+import com.example.novascotiawrittendrivingtest.dataClass.Message
 
 class ChatAdapter(private val messageList: List<Message>) : RecyclerView.Adapter<ChatAdapter.MyViewHolder>() {
 

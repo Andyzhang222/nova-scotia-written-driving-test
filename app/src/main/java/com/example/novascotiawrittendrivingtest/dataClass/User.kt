@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.dataClass
 
 /**
  * User data class for storing user information

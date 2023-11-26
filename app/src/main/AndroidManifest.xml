@@ -18,11 +18,11 @@
         android:theme="@style/Theme.NovaScotiaWrittenDrivingTest"
         tools:targetApi="31">
         <activity
-            android:name=".EmptyWrongActivity"
+            android:name=".test.EmptyWrongActivity"
             android:exported="false" />
         <activity
-            android:name=".AIchatActivity"
-            android:exported="true" />
+            android:name=".aiChat.AIchatActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -33,19 +33,19 @@
 
         <activity
             android:name=".RegisterActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
-            android:name=".DrivingTestActivity"
-            android:exported="true" />
+            android:name=".test.DrivingTestActivity"
+            android:exported="false" />
         <activity
-            android:name=".WrongQuestionReviewActivity"
-            android:exported="true" />
+            android:name=".test.WrongQuestionReviewActivity"
+            android:exported="false" />
         <activity
             android:name=".MapActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
         <activity
             android:name=".MainActivity"
@@ -57,7 +57,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NotificationReceiver" />
+        <receiver android:name=".notification.NotificationReceiver" />
     </application>
 
 </manifest>

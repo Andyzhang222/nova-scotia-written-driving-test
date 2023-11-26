@@ -64,6 +64,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Checks if the user is already signed in and navigates to the main activity if so
+     */
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.

@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest.question
+package com.example.novascotiawrittendrivingtest.dataClass
 
 /**
  * Data class for question

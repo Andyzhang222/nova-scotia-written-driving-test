@@ -1,4 +1,4 @@
-package com.example.novascotiawrittendrivingtest
+package com.example.novascotiawrittendrivingtest.test
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -15,7 +15,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.novascotiawrittendrivingtest.question.Question
+import com.example.novascotiawrittendrivingtest.MainActivity
+import com.example.novascotiawrittendrivingtest.R
+import com.example.novascotiawrittendrivingtest.dataClass.User
+import com.example.novascotiawrittendrivingtest.dataClass.Question
 import com.example.novascotiawrittendrivingtest.question.QuestionBank
 import com.example.novascotiawrittendrivingtest.question.QuestionBank_CN
 import com.google.firebase.Firebase
@@ -28,7 +31,7 @@ import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import java.util.Locale
 
-class WrongQuestionReviewActivity : AppCompatActivity() {
+class DrivingTestActivity : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
     private lateinit var questionImage: ImageView
@@ -43,7 +46,6 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
     private lateinit var restartButton: ImageView
 
     private lateinit var questionsList: ArrayList<Question>
-    private var incorrectQuestionsList: List<String> = listOf()
 
     private var selectedPosition: Int = 0
     private var correctAnswer: Int = 0
@@ -65,28 +67,33 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
 
         setContentView(R.layout.driving_test_layout)
 
-        database = Firebase.database.reference
         val user = Firebase.auth.currentUser
         user?.let {
             userId = it.uid
-            fetchIncorrectQuestionIds(userId)
         }
 
         // initialize views
         initializeViews()
 
         // initialize questions
-//        questionsList = QuestionBank.getQuestionsByIds(incorrectQuestionsList)
+        val selectedLanguage = getUserSelectedLanguage()
+        questionsList = if (selectedLanguage == "zh") {
+            QuestionBank_CN.getAllQuestionsCN()
+        } else {
+            QuestionBank.getAllQuestionsEN()
+        }
 
         // initialize question based on last time question position
+        database = Firebase.database.reference
         database.child("users").child(userId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue<User>()
                 // Do something with the user data
                 if (user != null) {
-                    currentPosition = user.currentPositionInWrongQuestion
+                    currentPosition = user.currentQuestionPosition
                 }
-                    initializeQuestion()
+
+                initializeQuestion()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -110,10 +117,15 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         restartButton.setOnClickListener {
             currentPosition = 0
             correctAnswer = 0
+            updateUserInFirebase(userId, currentPosition)
             initializeQuestion()
         }
     }
 
+    private fun getUserSelectedLanguage(): String {
+        val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
+        return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
+    }
     /**
      * Initialize views
      */
@@ -151,9 +163,8 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         optionFour.text = question.optionFour
 
         // Update progress bar and text
-        progressBar.max = questionsList.size
         progressBar.progress = currentPosition
-        progressText.text = "${currentPosition}/ ${incorrectQuestionsList.size}"
+        progressText.text = "$currentPosition / ${progressBar.max}"
 
         // Set default option view layout
         setDefault(optionOne)
@@ -162,8 +173,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         setDefault(optionFour)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size) getString(R.string.finish_quiz) else getString(R.string.answer)
-
+        btnSubmit.text = getString(R.string.answer)
     }
 
     /**
@@ -202,7 +212,8 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         } else {
             evaluateSelectedOption()
 
-            if (currentPosition == questionsList.size - 1) {
+
+            if (currentPosition == 39) {
                 // Create an AlertDialog builder
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle(getString(R.string.quiz_complete))
@@ -221,6 +232,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
                 val dialog = builder.create()
                 dialog.show()
             }
+
         }
     }
 
@@ -228,6 +240,12 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
      * Handle go to next question
      */
     private fun handleNextQuestion() {
+        if (!correctness) {
+            // Save incorrect question to firebase
+            val question = questionsList[currentPosition]
+            saveIncorrectQuestion(userId, question)
+        }
+
         if (currentPosition + 1 < questionsList.size) {
             currentPosition++
             updateUserInFirebase(userId, currentPosition)
@@ -256,13 +274,16 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         answerUpdate(question.correctAnswer, R.drawable.correct_option_border_bg)
 
         // Set submit button text
-        btnSubmit.text = if (currentPosition == questionsList.size - 1) getString(R.string.finish_quiz) else getString(R.string.next_question)
+        btnSubmit.text = if (currentPosition == questionsList.size - 1) getString(R.string.finish_quiz) else getString(
+            R.string.next_question
+        )
 
         // Reset selected position
         selectedPosition = 0
 
+        // Update progress bar and text
         progressBar.progress = currentPosition + 1
-        progressText.text = "${currentPosition + 1}/ ${incorrectQuestionsList.size}"
+        progressText.text = "${currentPosition + 1}/ ${progressBar.max}"
     }
 
     /**
@@ -299,7 +320,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
      * Update user test state in firebase
      */
     private fun updateUserInFirebase(userId: String, currentPosition: Int) {
-        val userUpdate = mapOf("currentPositionInWrongQuestion" to currentPosition)
+        val userUpdate = mapOf("currentQuestionPosition" to currentPosition)
         database.child("users").child(userId).updateChildren(userUpdate)
             .addOnSuccessListener {
                 Log.d(TAG, "User data updated successfully.")
@@ -309,17 +330,26 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
             }
     }
 
-    private fun fetchIncorrectQuestionIds(userId: String) {
+    /**
+     * Save incorrect question to firebase
+     */
+    private fun saveIncorrectQuestion(userId: String, question: Question) {
+        val questionIdAsString = question.id.toString()
         val incorrectQuestionsRef = database.child("users").child(userId).child("incorrectQuestions")
-        incorrectQuestionsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+
+        incorrectQuestionsRef.child(questionIdAsString).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    incorrectQuestionsList = snapshot.children.mapNotNull { it.key }
-                    questionsList = if (getUserSelectedLanguage() == "zh") {
-                        QuestionBank_CN.getQuestionsByIds(incorrectQuestionsList)
-                    } else {
-                        QuestionBank.getQuestionsByIds(incorrectQuestionsList)
-                    }
+                if (!snapshot.exists()) {
+                    // Question has not been saved before, save it now
+                    incorrectQuestionsRef.child(questionIdAsString).setValue(true) // Just marking it as true for existence
+                        .addOnSuccessListener {
+                            Log.d(TAG, "Incorrect question saved successfully.")
+                        }
+                        .addOnFailureListener {
+                            Log.e(TAG, "Failed to save incorrect question.", it)
+                        }
+                } else {
+                    Log.d(TAG, "Incorrect question already saved, not saving duplicate.")
                 }
             }
 
@@ -329,14 +359,16 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         })
     }
 
-    private fun getUserSelectedLanguage(): String {
-        val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
-        return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
-    }
-
+    /**
+     * Navigate to main activity
+     */
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
         // Add other extras as needed
         startActivity(intent)
+        finish()
     }
 }
+
+
+
