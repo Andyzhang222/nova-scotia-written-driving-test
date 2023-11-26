@@ -25,7 +25,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     // Late-initialized variables for Google Map and location services
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
+    lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private var lastKnownLocation: Location? = null
@@ -132,7 +132,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * Creates a location request with specific parameters
      */
-    private fun createLocationRequest() {
+    fun createLocationRequest() {
         locationRequest = LocationRequest.Builder(10000L) // Interval in milliseconds
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
             .setMinUpdateDistanceMeters(5f) // Your desired minimum displacement between location updates

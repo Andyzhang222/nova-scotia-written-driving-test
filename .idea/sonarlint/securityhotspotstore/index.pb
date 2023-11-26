@@ -67,3 +67,5 @@ Sapp/src/main/java/com/example/novascotiawrittendrivingtest/FirebaseAuthenticato
 Kapp/src/main/java/com/example/novascotiawrittendrivingtest/Authenticator.kt,5/c/5ceed89d447df429c5ea822e242fad9f3c03f037
 ‡
 Wapp/src/test/java/com/example/novascotiawrittendrivingtest/FirebaseAuthenticatorTest.kt,3/f/3f538563f468cc1cebf00f08a8928a0c2bed726b
+}
+Mapp/src/test/java/com/example/novascotiawrittendrivingtest/MapActivityTest.kt,4/7/47cd95e5f8a69af28799444283bcc374961ab220
