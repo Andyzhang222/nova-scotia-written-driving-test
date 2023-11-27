@@ -59,6 +59,7 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Set language
         val language = getUserSelectedLanguage()
         val locale = Locale(language)
         Locale.setDefault(locale)
@@ -66,8 +67,10 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
 
+        // Set content view
         setContentView(R.layout.driving_test_layout)
 
+        // Initialize firebase database
         database = Firebase.database.reference
         val user = Firebase.auth.currentUser
         user?.let {
@@ -210,6 +213,9 @@ class WrongQuestionReviewActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Show reset alert
+     */
     private fun showResetAlert() {
         // Create an AlertDialog builder
         val builder = AlertDialog.Builder(this)

@@ -58,6 +58,7 @@ class DrivingTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Set language
         val language = getUserSelectedLanguage()
         val locale = Locale(language)
         Locale.setDefault(locale)
@@ -65,8 +66,10 @@ class DrivingTestActivity : AppCompatActivity() {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
 
+        // Set content view
         setContentView(R.layout.driving_test_layout)
 
+        // Get user id
         val user = Firebase.auth.currentUser
         user?.let {
             userId = it.uid
@@ -221,6 +224,9 @@ class DrivingTestActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Show reset alert
+     */
     private fun showResetAlert() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.quiz_complete))

@@ -70,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
+        // Set guest text listener
         guestText.setOnClickListener {
             signInAnonymously()
         }

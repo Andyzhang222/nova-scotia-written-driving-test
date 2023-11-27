@@ -14,6 +14,7 @@ class EmptyWrongActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Set language
         val language = getUserSelectedLanguage()
         val locale = Locale(language)
         Locale.setDefault(locale)
@@ -21,6 +22,7 @@ class EmptyWrongActivity : AppCompatActivity() {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
 
+        // Set content view
         setContentView(R.layout.activity_empty_wrong)
 
         // set click listener for back button
@@ -28,11 +30,17 @@ class EmptyWrongActivity : AppCompatActivity() {
         backButton.setOnClickListener { navigateToMain() }
     }
 
+    /**
+     * Navigate to main activity
+     */
     private fun getUserSelectedLanguage(): String {
         val sharedPref = this.getSharedPreferences("AppSettingsPrefs", Context.MODE_PRIVATE)
         return sharedPref.getString("SelectedLanguage", "en") ?: "en" // Default to English
     }
 
+    /**
+     * Navigate to main activity
+     */
     private fun navigateToMain() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
