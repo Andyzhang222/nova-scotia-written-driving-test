@@ -122,16 +122,6 @@ class MainActivity : AppCompatActivity() {
         notificationManager.scheduleNotification()
     }
 
-//    private fun setLanguage() {
-//        val sharedPref = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE)
-//        val language = sharedPref.getString("SelectedLanguage", Locale.getDefault().language)
-//        val locale = Locale(language)
-//        Locale.setDefault(locale)
-//        val config = resources.configuration
-//        config.setLocale(locale)
-//        resources.updateConfiguration(config, resources.displayMetrics)
-//    }
-
     private fun setLanguage(languageCode: String? = null) {
         val sharedPref = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE)
         val currentLanguage = languageCode ?: sharedPref.getString("SelectedLanguage", Locale.getDefault().language)

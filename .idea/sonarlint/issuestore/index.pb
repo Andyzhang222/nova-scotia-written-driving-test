@@ -19,8 +19,6 @@ Iapp/src/main/java/com/example/novascotiawrittendrivingtest/MapActivity.kt,f/0/
 Napp/src/main/java/com/example/novascotiawrittendrivingtest/RegisterActivity.kt,c/4/c4fc56fc8a4f86804232c0ec5401c9acfb361ef9
 Ä
 Papp/src/main/java/com/example/novascotiawrittendrivingtest/dataClass/Question.kt,e/3/e3efde1b68769f7df8dbbc74022e932ebbe82f89
-É
-Sapp/src/main/java/com/example/novascotiawrittendrivingtest/aiChat/AIchatActivity.kt,b/e/bebc707a69b57ee284d8a61cad77adb0af9f1ff6
 é
 ^app/src/main/java/com/example/novascotiawrittendrivingtest/notification/NotificationManager.kt,6/0/60b144a1a1df627e25e7e5ce48de6c8a064c9445
 Ö
@@ -39,8 +37,6 @@ Vapp/src/main/java/com/example/novascotiawrittendrivingtest/dataClass/OpenAIResp
 Lapp/src/main/java/com/example/novascotiawrittendrivingtest/dataClass/User.kt,0/f/0fb11def92af2ea212edcdc5304c0c10a485101d
 é
 ^app/src/main/java/com/example/novascotiawrittendrivingtest/test/WrongQuestionReviewActivity.kt,4/f/4f17eb3f50fb9bc599abc6e25f9ba5fdc6f3b091
-Ä
-Papp/src/main/java/com/example/novascotiawrittendrivingtest/aiChat/ChatAdapter.kt,6/1/61c9cc4100d4255dfd80c742b1770073dcca3f61
 è
 _app/src/main/java/com/example/novascotiawrittendrivingtest/notification/NotificationReceiver.kt,4/6/46c3f46a11eafa50cb385316ed348ff61dff88a9
 É
@@ -59,12 +55,6 @@ Kapp/src/test/java/com/example/novascotiawrittendrivingtest/OpenAIAPITest.kt,1/
 Sapp/src/main/java/com/example/novascotiawrittendrivingtest/apiCall/ClientBuilder.kt,2/9/29eaada919b7cf21a526e8442c5869f301036176
 Ç
 Rapp/src/test/java/com/example/novascotiawrittendrivingtest/RegisterActivityTest.kt,a/b/ab2b9b912e71eec08b6af4c46ccf882adfa120c5
-~
-Napp/src/main/java/com/example/novascotiawrittendrivingtest/ValidateRegister.kt,2/5/254422ff5469c42072c9f267b8fc70de85d10ded
-É
-Sapp/src/main/java/com/example/novascotiawrittendrivingtest/FirebaseAuthenticator.kt,4/c/4c9d73e2af78ae02dccf87cfca427b453c805805
-{
-Kapp/src/main/java/com/example/novascotiawrittendrivingtest/Authenticator.kt,5/c/5ceed89d447df429c5ea822e242fad9f3c03f037
 á
 Wapp/src/test/java/com/example/novascotiawrittendrivingtest/FirebaseAuthenticatorTest.kt,3/f/3f538563f468cc1cebf00f08a8928a0c2bed726b
 }
@@ -79,3 +69,7 @@ Papp/src/main/java/com/example/novascotiawrittendrivingtest/helper/ChatAdapter.k
 Uapp/src/main/java/com/example/novascotiawrittendrivingtest/helper/ValidateRegister.kt,0/d/0dc7d1d330bbdc62357776fbeea32b3b73469cb3
 |
 Lapp/src/main/java/com/example/novascotiawrittendrivingtest/AIchatActivity.kt,5/f/5f9809234dbfee45451cf30aaa0b694e8aa03fd2
+Ü
+Vapp/src/test/java/com/example/novascotiawrittendrivingtest/NotificationReceiverTest.kt,e/8/e82d07fd5e9dab0b0d5df788685fa6a5f296c33c
+Ö
+Uapp/src/test/java/com/example/novascotiawrittendrivingtest/NotificationManagerTest.kt,3/9/39b2215ae6aed52241cee1a394c977e22db4c354

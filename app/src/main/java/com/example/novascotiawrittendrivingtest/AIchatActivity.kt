@@ -79,8 +79,6 @@ class AIchatActivity : AppCompatActivity() {
         }
     }
 
-    // Add the response to the chat
-
     /**
      * Adds the response from the API to the chat.
      *
